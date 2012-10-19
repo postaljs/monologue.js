@@ -1,0 +1,8 @@
+{
+	"anvil.http" : {
+		"paths" : {
+			"/"         : "./"
+		}
+	},
+	"dependencies" : [ "anvil.http", "anvil.uglify" ]
+}
