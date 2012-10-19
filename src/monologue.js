@@ -64,7 +64,9 @@ _.extend( Monologue.prototype, {
 		_.each( _.clone(this._subscriptions), function(subDef, subTopic) {
 			if( Monologue.resolver.compare(subTopic, topic)) {
 				_.each(subDef, function(subscriber){
-					if ( typeof subscriber.callback === 'function' ) {
+					if ( _.all( subscriber.constraints, function ( constraint ) {
+						return constraint( data );
+					} ) && ( typeof subscriber.callback === 'function' )) {
 						try {
 							subscriber.callback.apply( subscriber.context, [data] );
 						} catch(ex) {
