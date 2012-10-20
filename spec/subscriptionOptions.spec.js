@@ -223,4 +223,110 @@ describe( 'Subscription Definition Options', function () {
 
 	} );
 
+	describe( 'When calling withConstraint()', function () {
+		var events = [];
+		var count = 0;
+		beforeEach(function () {
+			events = [];
+			sub = monologue.on( "Some.Topic",function ( data ) {
+				events.push(data);
+			} ).withConstraint(function(data){
+					var cnt = count;
+					count += 1
+					return cnt === 0;
+				});
+		});
+
+		afterEach( function () {
+			sub.unsubscribe();
+		} );
+
+		it( 'Should unsubscribe the callback after 1 invocation', function () {
+			monologue.emit( "Some.Topic", { name: "Paul McCartney" } );
+			monologue.emit( "Some.Topic", { name: "John Lennon" } );
+			expect( events.length ).to.be( 1 );
+			expect( events[0] ).to.eql( { name: "Paul McCartney" } );
+		} );
+
+	} );
+
+	describe( 'When calling withDebounce', function() {
+		var events;
+
+		beforeEach(function () {
+			events = [];
+			sub = monologue.on( "Debounced.Topic",function ( data ) {
+				events.push( data );
+			} ).withDebounce( 600 );
+		});
+
+		it( "should have only invoked debounced callback once", function (done) {
+			monologue.emit( "Debounced.Topic", { name: "Help!" } ); // starts the clock on debounce
+			setTimeout( function () {
+				monologue.emit( "Debounced.Topic", { name: "Paul McCartney" } );
+			}, 20 ); // should not invoke callback
+			setTimeout( function () {
+				monologue.emit( "Debounced.Topic", { name: "John Lennon" } );
+			}, 100 ); // should not invoke callback
+			setTimeout( function () {
+				monologue.emit( "Debounced.Topic", { name: "George Harrison" } );
+			}, 150 ); // should not invoke callback
+			setTimeout( function () {
+				monologue.emit( "Debounced.Topic", { name: "Ringo Starkey" } );
+			}, 750 ); // should not invoke callback
+			setTimeout( function () {
+				expect( events[0] ).to.eql( { name: "Ringo Starkey" } );
+				expect( events.length ).to.be( 1 );
+				sub.unsubscribe();
+				done();
+			},1500);
+		} );
+	});
+
+	describe( 'When calling withDelay', function() {
+		var events;
+
+		beforeEach(function () {
+			events = [];
+			sub = monologue.on( "Delayed.Topic",function ( data ) {
+				events.push( data );
+			} ).withDelay( 300 );
+		});
+
+		it( "should have only invoked debounced callback once", function (done) {
+			monologue.emit( "Delayed.Topic", { name: "Help!" } ); // starts the clock on debounce
+			setTimeout( function () {
+				expect( events[0] ).to.eql( { name: "Help!" } );
+				expect( events.length ).to.be( 1 );
+				sub.unsubscribe();
+				done();
+			},600);
+		} );
+	});
+
+	describe(' When calling withThrottle', function() {
+		var events;
+
+		beforeEach(function () {
+			events = [];
+			sub = monologue.on( "Throttled.Topic",function ( data ) {
+				events.push( data );
+			} ).withThrottle( 500 );
+		});
+
+		it( "should have only invoked throttled callback once", function (done) {
+			monologue.emit( "Throttled.Topic", { name: "Hey, Jude." } ); // starts clock on throttle
+			events = [];
+			for ( var i = 0; i < 10; i++ ) {
+				(function ( x ) {
+					monologue.emit( "Throttled.Topic", { name: "Hey, Jude." } );
+				})( i );
+			}
+			setTimeout( function () {
+				expect( events.length ).to.be( 1 );
+				done();
+			}, 800 );
+		} );
+	});
+
 });
