@@ -28,4 +28,18 @@ describe( 'Removing Subscriptions', function () {
 		expect( monologue._subscriptions["Some.Topic"].length ).to.be( 0 );
 	} );
 
+	it( 'Calling monologue.off() should remove ALL Subscriptions', function () {
+		var subB = monologue.on( "Other.Topic", function ( data ) {
+			events.push( data );
+		} );
+		var subC = monologue.on( "Other.Stuff", function ( data ) {
+			events.push( data );
+		} );
+		expect( monologue._subscriptions["Some.Topic"][0] ).to.eql( sub );
+		expect( monologue._subscriptions["Other.Topic"][0] ).to.eql( subB );
+		expect( monologue._subscriptions["Other.Stuff"][0] ).to.eql( subC );
+		monologue.off();
+		expect( monologue._subscriptions ).to.eql( {} );
+	} );
+
 } );
