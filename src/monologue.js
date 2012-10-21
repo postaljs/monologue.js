@@ -1,5 +1,7 @@
 var Monologue = function () {
 	this._subscriptions = {};
+	this._yuno = [];
+	this._trackErrors = true;
 };
 
 _.extend( Monologue.prototype, {
@@ -23,6 +25,14 @@ _.extend( Monologue.prototype, {
 
 	off : function ( topic, context ) {
 		switch(arguments.length) {
+			case 0:
+				_.each(this._subscriptions, function(topic){
+					_.each(topic, function(subDef){
+						subDef.unsubscribe();
+					});
+				});
+				this._subscriptions = {};
+				break;
 			case 1:
 				var type = Object.prototype.toString.call(topic) === "[object String]" ? "topic" : topic.hasOwnProperty("unsubscribe") ? "def" : "context";
 				switch(type) {
@@ -61,22 +71,34 @@ _.extend( Monologue.prototype, {
 	},
 
 	emit: function( topic, data ) {
+		var env = this.getEnvelope(topic, data);
+		env.topic = topic;
+		env.data = data;
 		_.each( _.clone(this._subscriptions), function(subDef, subTopic) {
 			if( Monologue.resolver.compare(subTopic, topic)) {
 				_.each(subDef, function(subscriber){
 					if ( _.all( subscriber.constraints, function ( constraint ) {
-						return constraint( data );
+						return constraint( data, env );
 					} ) && ( typeof subscriber.callback === 'function' )) {
 						try {
-							subscriber.callback.apply( subscriber.context, [data] );
+							subscriber.callback.apply( subscriber.context, [data,env] );
 						} catch(ex) {
 							// do nothing for now other than:
 							subscriber.failed = true;
+							if(this._trackErrors) {
+								this._yuno.push({ def: subscriber, env: env});
+							}
 						}
 					}
 				})
 			}
 		});
+	},
+
+	getEnvelope: function(topic, data) {
+		return {
+			timeStamp: new Date()
+		};
 	}
 } );
 
