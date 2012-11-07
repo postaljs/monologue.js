@@ -337,6 +337,7 @@ describe( 'Emitting Events', function () {
   describe("When throwing exceptions in the subscriber", function() {
     describe("With error tracking ON", function(){
       var monologue = new Monologue(), subA, subB, subBFired;
+      monologue._trackErrors = true;
 
       subA = monologue.on("Anything", function(d, e) {
         throw "O NOES!";
@@ -360,7 +361,6 @@ describe( 'Emitting Events', function () {
 
     describe("With error tracking OFF", function(){
       var monologue = new Monologue(), subA, subB, subBFired;
-      monologue._trackErrors = false;
 
       subA = monologue.on("Anything", function(d, e) {
         throw "O NOES!";
@@ -377,7 +377,7 @@ describe( 'Emitting Events', function () {
       });
 
       it("Should not have captured the error", function() {
-        expect( monologue._yuno.length ).to.be(0);
+        expect( monologue._yuno ).to.be(undefined);
       });
     });
   });

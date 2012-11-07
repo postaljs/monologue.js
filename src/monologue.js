@@ -1,12 +1,11 @@
-var Monologue = function () {
-	this._subscriptions = {};
-	this._yuno = [];
-	this._trackErrors = true;
-};
+var Monologue = function () {};
 
-_.extend( Monologue.prototype, {
+Monologue.prototype = {
 	on : function ( topic, callback ) {
 		var self = this;
+    if(!self._subscriptions) {
+      self._subscriptions = {};
+    }
 		var subDef = new SubscriptionDefinition(topic, callback, self );
 		var subs = self._subscriptions[topic];
 		if ( !subs ) {
@@ -21,6 +20,9 @@ _.extend( Monologue.prototype, {
 	},
 
 	off : function ( topic, context ) {
+    if(!this._subscriptions) {
+      this._subscriptions = {};
+    }
 		switch(arguments.length) {
 			case 0:
 				_.each(this._subscriptions, function(topic){
@@ -69,8 +71,11 @@ _.extend( Monologue.prototype, {
 
 	emit: function( topic, data ) {
 		var env = this.getEnvelope(topic, data);
-		env.topic = topic;
-		env.data = data;
+    env.topic = topic;
+    env.data = data;
+    if(!this._subscriptions) {
+      this._subscriptions = {};
+    }
 		_.each( _.clone(this._subscriptions), function(subDef, subTopic) {
 			if( Monologue.resolver.compare(subTopic, topic)) {
 				_.each(subDef, function(subscriber){
@@ -83,6 +88,9 @@ _.extend( Monologue.prototype, {
 							// do nothing for now other than:
 							subscriber.failed = true;
 							if(this._trackErrors) {
+                if(!this._yuno) {
+                  this._yuno = [];
+                }
 								this._yuno.push({ def: subscriber, env: env, exception: ex});
 							}
 						}
@@ -97,6 +105,6 @@ _.extend( Monologue.prototype, {
 			timeStamp: new Date()
 		};
 	}
-} );
+};
 
 Monologue.resolver = bindingsResolver;
