@@ -18,12 +18,24 @@ If you want to extend your objects with the ability to trigger custom events, ta
 
 ### How do I use it?
 ##### Adding monologue functionality to an instance
-Probably the most common use case is to put a monologue instance in the prototype chain of an object:
+
+You can use the "makeEmitter" helper function, which mixes Monologue into the prototype of your object:
 
 ```javascript
 var Worker = function(name) {
     this.name = name;
-    Monologue.call(this);
+};
+Worker.prototype.doWork = function() {
+    this.emit("work.done", { who: this.name });
+};
+Monologue.makeEmitter(Worker);
+```
+
+You can also manually put a monologue instance in the prototype chain of an object:
+
+```javascript
+var Worker = function(name) {
+    this.name = name;
 };
 Worker.prototype = Monologue.prototype;
 Worker.prototype.doWork = function() {
@@ -209,7 +221,6 @@ One of the core features of monologue is that subscriber callbacks won't be able
 ```javascript
 var Worker = function(name) {
     this.name = name;
-    Monologue.call(this);
 };
 Worker.prototype = Monologue.prototype;
 var instance = new Worker();
