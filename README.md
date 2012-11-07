@@ -23,8 +23,9 @@ Probably the most common use case is to put a monologue instance in the prototyp
 ```javascript
 var Worker = function(name) {
     this.name = name;
+    Monologue.call(this);
 };
-Worker.prototype = new Monologue();
+Worker.prototype = Monologue.prototype;
 Worker.prototype.doWork = function() {
     this.emit("work.done", { who: this.name });
 };
@@ -208,8 +209,9 @@ One of the core features of monologue is that subscriber callbacks won't be able
 ```javascript
 var Worker = function(name) {
     this.name = name;
+    Monologue.call(this);
 };
-Worker.prototype = new Monologue();
+Worker.prototype = Monologue.prototype;
 var instance = new Worker();
 instance._trackErrors = false;
 ```
