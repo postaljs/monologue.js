@@ -31,11 +31,12 @@ var DistinctPredicate = function () {
 	};
 };
 
-var SubscriptionDefinition = function ( topic, callback ) {
+var SubscriptionDefinition = function ( topic, callback, emitter ) {
 	this.topic = topic;
 	this.callback = callback;
 	this.context = null;
 	this.constraints = [];
+	this.emitter = emitter;
 };
 
 _.extend(SubscriptionDefinition.prototype, {
@@ -82,6 +83,10 @@ _.extend(SubscriptionDefinition.prototype, {
 	distinct : function () {
 		this.withConstraint( new DistinctPredicate() );
 		return this;
+	},
+
+	unsubscribe : function () {
+		this.emitter._subscriptions[this.topic] = _.without(this.emitter._subscriptions[this.topic], this);
 	},
 
 	withConstraint : function ( predicate ) {
@@ -131,5 +136,7 @@ _.extend(SubscriptionDefinition.prototype, {
 		var fn = this.callback;
 		this.callback = _.throttle( fn, milliseconds );
 		return this;
-	},
+	}
 });
+
+SubscriptionDefinition.prototype.off = SubscriptionDefinition.prototype.unsubscribe;

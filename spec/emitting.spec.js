@@ -108,7 +108,6 @@ describe( 'Emitting Events', function () {
 		} );
 	});
 
-
 	describe("With wildcards involving * at end of binding", function(){
 		beforeEach( function () {
 			events = [];
@@ -141,8 +140,6 @@ describe( 'Emitting Events', function () {
 			expect(envs[1] ).to.have.property("data");
 		} );
 	});
-
-
 
 	describe("With wildcards involving # at start of binding", function(){
 		beforeEach( function () {
@@ -205,7 +202,6 @@ describe( 'Emitting Events', function () {
 			expect(envs[0] ).to.have.property("data");
 		} );
 	});
-
 
 	describe("With wildcards involving # at end of binding", function(){
 		beforeEach( function () {
@@ -337,4 +333,52 @@ describe( 'Emitting Events', function () {
 			expect(envelope.data ).to.eql({ msg: "Oh, hai" });
 		});
 	});
+
+  describe("When throwing exceptions in the subscriber", function() {
+    describe("With error tracking ON", function(){
+      var monologue = new Monologue(), subA, subB, subBFired;
+
+      subA = monologue.on("Anything", function(d, e) {
+        throw "O NOES!";
+      });
+
+      subB = monologue.on("Anything", function(d, e) {
+        subBFired = true;
+      });
+
+      monologue.emit("Anything", { msg: "Oh, hai" });
+
+      it("Should have fired the second subscriber", function() {
+        expect(subBFired ).to.be(true);
+      });
+
+      it("Should have captured the error", function() {
+        expect( monologue._yuno.length ).to.be(1);
+        expect( monologue._yuno[0].exception ).to.be("O NOES!");
+      });
+    });
+
+    describe("With error tracking OFF", function(){
+      var monologue = new Monologue(), subA, subB, subBFired;
+      monologue._trackErrors = false;
+
+      subA = monologue.on("Anything", function(d, e) {
+        throw "O NOES!";
+      });
+
+      subB = monologue.on("Anything", function(d, e) {
+        subBFired = true;
+      });
+
+      monologue.emit("Anything", { msg: "Oh, hai" });
+
+      it("Should have fired the second subscriber", function() {
+        expect(subBFired ).to.be(true);
+      });
+
+      it("Should not have captured the error", function() {
+        expect( monologue._yuno.length ).to.be(0);
+      });
+    });
+  });
 } );
