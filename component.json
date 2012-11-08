@@ -1,0 +1,8 @@
+{
+	"name"    : "monologue",
+	"version" : "0.1.0",
+	"main"    : ["lib/browser/monologue.js"],
+	"dependencies": {
+		"underscore": "~1.1.7"
+	}
+}

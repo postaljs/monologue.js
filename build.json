@@ -1,4 +1,7 @@
 {
+    "anvil.uglify" : {
+        "exclude" : ["./node/monologue.js"]
+    },
 	"anvil.http" : {
 		"paths" : {
 			"/"         : "./"
