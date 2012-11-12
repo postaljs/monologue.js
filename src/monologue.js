@@ -112,7 +112,7 @@ Monologue.resolver = bindingsResolver;
 
 Monologue.SubscriptionDefinition = SubscriptionDefinition;
 
-Monologue.makeEmitter = function (subc) {
+Monologue.mixin = function (subc) {
   if (!subc) {
     throw new Error('You have to provide a constructor function if you want to make it an emitter.');
   }

@@ -19,7 +19,7 @@ If you want to extend your objects with the ability to trigger custom events, ta
 ### How do I use it?
 ##### Adding monologue functionality to an instance
 
-You can use the "makeEmitter" helper function, which mixes Monologue into the prototype of your object:
+You can use the `mixin` helper function, which mixes Monologue into the prototype of your object:
 
 ```javascript
 var Worker = function(name) {
@@ -28,7 +28,7 @@ var Worker = function(name) {
 Worker.prototype.doWork = function() {
     this.emit("work.done", { who: this.name });
 };
-Monologue.makeEmitter(Worker);
+Monologue.mixin(Worker);
 ```
 
 You can also manually put a monologue instance in the prototype chain of an object:

@@ -7,7 +7,7 @@ describe( 'Inheriting From Monologue', function () {
     this.emit('bar');
   };
 
-  Monologue.makeEmitter(MyStuff);
+  Monologue.mixin(MyStuff);
 
   var instance = new MyStuff(), emitted = false;
 
