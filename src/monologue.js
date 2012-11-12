@@ -15,6 +15,7 @@ Monologue.prototype = {
 		return subDef;
 	},
 
+  // some comment
 	once: function(topic, callback) {
 		return this.on(topic, callback ).once();
 	},
@@ -109,6 +110,8 @@ Monologue.prototype = {
 
 Monologue.resolver = bindingsResolver;
 
+Monologue.SubscriptionDefinition = SubscriptionDefinition;
+
 Monologue.makeEmitter = function (subc) {
   if (!subc) {
     throw new Error('You have to provide a constructor function if you want to make it an emitter.');
@@ -119,4 +122,4 @@ Monologue.makeEmitter = function (subc) {
   subc.prototype.constructor = subc;
   subc.prototype.parent = Monologue.prototype;
   subc.prototype.parent.constructor = Monologue;
-}
+};
