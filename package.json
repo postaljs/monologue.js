@@ -1,7 +1,7 @@
 {
     "name" : "monologue.js",
     "description" : "EventEmitter replacement with AMQP-style bindings and other advanced features. Compatible with postal.js's API.",
-    "version" : "0.1.1",
+    "version" : "0.1.2",
     "homepage" : "https://github.com/ifandelse/monologue.js",
     "repository" : {
         "type" : "git",
@@ -30,8 +30,8 @@
         "email" : "jim@ifandelse.com",
         "url" : "http://github.com/ifandelse/monologue.js/issues"
    },
-	"directories" : { "lib" : "lib/node" },
-    "main" : "lib/node/monologue.js",
+	"directories" : { "lib" : "lib" },
+    "main" : "lib/monologue.js",
 	"engines" : {
 		"node" : ">=0.4.0"
 	},
