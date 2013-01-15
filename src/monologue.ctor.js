@@ -117,9 +117,7 @@ Monologue.mixin = function ( subc ) {
 	if ( !subc ) {
 		throw new Error( 'You have to provide a constructor function if you want to make it an emitter.' );
 	}
-	var monologue = function () {};
-	monologue.prototype = Monologue.prototype;
-	_.extend( subc.prototype, new monologue() );
+	_.extend( subc.prototype, Monologue.prototype );
 	subc.prototype.constructor = subc;
 	subc.prototype.parent = Monologue.prototype;
 	subc.prototype.parent.constructor = Monologue;
