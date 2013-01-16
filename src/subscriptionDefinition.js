@@ -58,9 +58,9 @@ _.extend(SubscriptionDefinition.prototype, {
 			throw "The value provided to disposeAfter (maxCalls) must be a number greater than zero.";
 		}
 		var self = this;
-		var dispose = _.after( maxCalls, _.bind( function () {
-			this.unsubscribe();
-		}, this ) );
+		var dispose = _.after( maxCalls, function () {
+      self.unsubscribe();
+		});
 
 		var fn = self.callback;
 		self.callback = function() {

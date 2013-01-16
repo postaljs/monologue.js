@@ -1,3 +1,27 @@
+var fireSub = function(subscriber, envelope) {
+  if ( Monologue.resolver.compare( subscriber.topic, envelope.topic ) ) {
+    if ( _.all( subscriber.constraints, function ( constraint ) {
+      return constraint( envelope.data, envelope );
+    } ) && ( typeof subscriber.callback === 'function' ) ) {
+      try {
+        subscriber.callback.apply( subscriber.context, [envelope.data, envelope] );
+      } catch ( ex ) {
+        if(Monologue.debug && typeof console !== "undefined" && typeof console.log === 'function') {
+          console.log("Monologue Emit Exception Caught");
+          console.log(ex);
+        }
+        subscriber.failed = true;
+        if ( this._trackErrors ) {
+          if ( !this._yuno ) {
+            this._yuno = [];
+          }
+          this._yuno.push( { def : subscriber, env : envelope, exception : ex} );
+        }
+      }
+    }
+  }
+};
+
 var Monologue = function () {};
 
 Monologue.prototype = {
@@ -70,35 +94,18 @@ Monologue.prototype = {
 	},
 
 	emit : function ( topic, data ) {
-		var env = this.getEnvelope( topic, data );
+		var envelope = this.getEnvelope( topic, data );
 		if ( !this._subscriptions ) {
 			this._subscriptions = {};
 		}
-		_.each( _.clone( this._subscriptions ), function ( subDef, subTopic ) {
-			if ( Monologue.resolver.compare( subTopic, topic ) ) {
-				_.each( subDef, function ( subscriber ) {
-					if ( _.all( subscriber.constraints, function ( constraint ) {
-						return constraint( data, env );
-					} ) && ( typeof subscriber.callback === 'function' ) ) {
-						try {
-							subscriber.callback.apply( subscriber.context, [data, env] );
-						} catch ( ex ) {
-							if(Monologue.debug && typeof console !== "undefined" && typeof console.log === 'function') {
-								console.log("Monologue Emit Exception Caught");
-								console.log(ex);
-							}
-							subscriber.failed = true;
-							if ( this._trackErrors ) {
-								if ( !this._yuno ) {
-									this._yuno = [];
-								}
-								this._yuno.push( { def : subscriber, env : env, exception : ex} );
-							}
-						}
-					}
-				}, this );
-			}
-		}, this );
+    _.each( this._subscriptions, function ( subscribers ) {
+      var idx = 0, len = subscribers.length, subDef;
+      while(idx < len) {
+        if( subDef = subscribers[idx++] ){
+          fireSub.call(this, subDef, envelope);
+        }
+      }
+    }, this);
 	},
 
 	getEnvelope : function ( topic, data ) {
