@@ -120,6 +120,8 @@ Monologue.prototype = {
 Monologue.resolver = bindingsResolver;
 Monologue.debug = false;
 Monologue.SubscriptionDefinition = SubscriptionDefinition;
+riveter( Monologue );
+/*
 Monologue.mixin = function ( subc ) {
 	if ( !subc ) {
 		throw new Error( 'You have to provide a constructor function if you want to make it an emitter.' );
@@ -129,3 +131,4 @@ Monologue.mixin = function ( subc ) {
 	subc.prototype.parent = Monologue.prototype;
 	subc.prototype.parent.constructor = Monologue;
 };
+*/
