@@ -14,8 +14,11 @@
 		root.Monologue = factory( root._, root.riveter, root );
 	}
 }( this, function ( _, riveter, global, undefined ) {
-	//import("bindingsResolver.js");
-	//import("subscriptionDefinition.js");
-	//import("monologue.ctor.js");
+	//import("../bindingsResolver.js");
+  //import("../consecutiveDistinctPredicate.js");
+  //import("../distinctPredicate.js");
+	//import("../subscriptionDefinition.js");
+	//import("../subscriptionDefinitionExtras.js");
+	//import("../monologue.ctor.js");
 	return Monologue;
 } ));
