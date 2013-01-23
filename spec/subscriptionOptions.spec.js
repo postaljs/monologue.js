@@ -11,10 +11,10 @@ describe( 'Subscription Definition Options', function () {
 
 		it( 'Should invoke the callback when the event loop is free', function ( done ) {
 			sub = monologue.on( "Some.Topic",function ( data ) {
-				expect( data ).to.be( "Hai" );
+				expect( data ).to.be( "Hai**" );
 				done();
 			} ).defer();
-			monologue.emit( "Some.Topic", "Hai" );
+			monologue.emit( "Some.Topic", "Hai**" );
 		} );
 	} );
 

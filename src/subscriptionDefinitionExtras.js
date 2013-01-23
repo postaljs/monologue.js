@@ -1,8 +1,9 @@
 _.extend(SubscriptionDefinition.prototype, {
   defer : function () {
     var fn = this.callback;
-    this.callback = function ( data ) {
-      setTimeout( fn, 0, data );
+    this.callback = function (data, env) {
+      var self = this;
+      setTimeout( function() { fn.call(self, data, env); }, 0 );
     };
     return this;
   },
