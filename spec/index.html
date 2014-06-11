@@ -3,17 +3,18 @@
 <head>
     <meta charset="utf-8">
     <title>Monologue Tests</title>
-    <link rel="stylesheet" href="/ext/mocha.css" />
+    <link rel="stylesheet" href="../bower/mocha/mocha.css" />
 </head>
 <body>
 <div id="mocha"></div>
-<script src="/ext/jquery-1.7.1.js"></script>
-<script src="/ext/underscore.js"></script>
-<script src="/ext/expect.js"></script>
-<script src="/ext/mocha.js"></script>
+<script src="../bower/jquery/jquery.js"></script>
+<script src="../bower/lodash/dist/lodash.js"></script>
+<script src="../bower/expect/expect.js"></script>
+<script src="../bower/mocha/mocha.js"></script>
 <script type="text/javascript">
     mocha.setup({ ui: 'bdd', timeout: 60000, ignoreLeaks: true });
 </script>
+<script src="../bower/riveter/lib/riveter.js"></script>
 <script src="/lib/monologue.js"></script>
 <script src="addingSubscribers.spec.js"></script>
 <script src="removingSubscribers.spec.js"></script>
