@@ -1,27 +1,38 @@
+/*jshint -W098 */
 var bindingsResolver = {
-  cache : { },
+    cache: {},
+    regex: {},
 
-  compare : function ( binding, topic ) {
-    if ( this.cache[topic] && this.cache[topic][binding] ) {
-      return true;
-    }
-    var pattern = ("^" + binding.replace( /\./g, "\\." )            // escape actual periods
-      .replace( /\*/g, "[A-Z,a-z,0-9]*" ) // asterisks match any alpha-numeric 'word'
-      .replace( /#/g, ".*" ) + "$")       // hash matches 'n' # of words (+ optional on start/end of topic)
-      .replace( "\\..*$", "(\\..*)*$" )   // fix end of topic matching on hash wildcards
-      .replace( "^.*\\.", "^(.*\\.)*" );  // fix beginning of topic matching on hash wildcards
-    var rgx = new RegExp( pattern );
-    var result = rgx.test( topic );
-    if ( result ) {
-      if ( !this.cache[topic] ) {
-        this.cache[topic] = {};
-      }
-      this.cache[topic][binding] = true;
-    }
-    return result;
-  },
+    compare: function(binding, topic) {
+        var pattern, rgx, prevSegment, result = (this.cache[topic] && this.cache[topic][binding]);
+        if (typeof result !== "undefined") {
+            return result;
+        }
+        if (!(rgx = this.regex[binding])) {
+            pattern = "^" + _.map(binding.split("."), function(segment) {
+                var res = "";
+                if ( !! prevSegment) {
+                    res = prevSegment !== "#" ? "\\.\\b" : "\\b";
+                }
+                if (segment === "#") {
+                    res += "[\\s\\S]*";
+                } else if (segment === "*") {
+                    res += "[^.]+";
+                } else {
+                    res += segment;
+                }
+                prevSegment = segment;
+                return res;
+            }).join("") + "$";
+            rgx = this.regex[binding] = new RegExp(pattern);
+        }
+        this.cache[topic] = this.cache[topic] || {};
+        this.cache[topic][binding] = result = rgx.test(topic);
+        return result;
+    },
 
-  reset : function () {
-    this.cache = {};
-  }
+    reset: function() {
+        this.cache = {};
+        this.regex = {};
+    }
 };

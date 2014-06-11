@@ -31,36 +31,21 @@
         "sub",
         "eventing"
     ],
-    "bugs": {
-        "email": "jim@ifandelse.com",
-        "url": "http://github.com/postaljs/monologue.js/issues"
-    },
-    "directories": {
-        "lib": "lib"
-    },
-    "main": "lib/monologue.js",
-    "engines": {
-        "node": ">=0.4.0"
-    },
+    "main": [
+        "lib/monologue.min.js",
+        "lib/monologue.js"
+    ],
     "dependencies": {
-        "lodash": ">=2.4.1",
+        "lodash": "~2.4.1",
         "riveter": "git://github.com/ifandelse/riveter.git#0cffebb92117c88543cb4359fb9fd69c2d65dd22"
     },
     "devDependencies": {
-        "bower": "~1.2.8",
-        "gulp-util": "~2.2.9",
-        "gulp": "~3.6.1",
-        "gulp-imports": "~0.0.1",
-        "gulp-header": "~1.0.2",
-        "gulp-hint-not": "~0.0.3",
-        "gulp-uglify": "^0.3.0",
-        "gulp-rename": "^1.2.0",
-        "gulp-plato": "^0.2.1",
-        "gulp-beautify": "~1.0.3",
-        "express": "~3.4.7",
-        "open": "~0.0.4",
-        "expect.js": "~0.2.0",
-        "mocha": "~1.19.0"
+        "jquery": "~1.10.2",
+        "bootstrap": "~3.0.3",
+        "expect": "0.1.2",
+        "mocha": "~1.17.0",
+        "requirejs": "~2.1.10",
+        "postal.diagnostics": "~0.7.3"
     },
     "licenses": [{
         "type": "MIT",
@@ -68,10 +53,5 @@
     }, {
         "type": "GPL",
         "url": "http://www.opensource.org/licenses/gpl-3.0.html"
-    }],
-    "scripts": {
-        "test": "mocha ./spec/*.js",
-        "build": "gulp",
-        "start": "gulp server"
-    }
+    }]
 }

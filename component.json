@@ -1,8 +1,9 @@
 {
-	"name"    : "monologue",
-	"version" : "0.1.4",
-	"main"    : ["lib/browser/monologue.js"],
-	"dependencies": {
-		"underscore": "~1.1.7"
-	}
+    "name": "monologue",
+    "version": "0.2.0",
+    "main": ["lib/monologue.js"],
+    "dependencies": {
+        "lodash": "~2.4.1",
+        "riveter": "git://github.com/ifandelse/riveter.git#0cffebb92117c88543cb4359fb9fd69c2d65dd22"
+    }
 }
