@@ -51,6 +51,8 @@ An alternative approach would be to 'mix-in' to an existing instance via a helpe
 	    },
 	    Monologue.prototype);
 
+monologue uses [riveter](https://github.com/ifandelse/riveter) for it's inheritance/mixin capabilities. There's a *lot* you can do with riveter, so check it out.
+
 #####Adding an event listener
 Any object that has monologue's behavior has an `on` method which can be used to subscribe to events.  The first argument of `on()` is the `topic` (just a string event name, which can optionally be a period-delimited string for hierarchical use).  The second argument of `on()` is the `callback` which should be invoked when the event occurs. Calling `on` returns a `SubscriptionDefinition` - giving you a convenient way to unsubscribe or apply additional options (discussed below) to the subscription.
 
