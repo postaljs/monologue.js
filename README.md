@@ -4,7 +4,7 @@
 monologue provides 'event-emitting' functionality - commonly referred to as "pub/sub" - that can be mixed into/inherited by your JavaScript objects.
 
 ##### Philosophy
-monologue's pub/sub implementation uses the observer pattern - meaning that subscribers should have a direct reference to the 'monologue-ized' object emitting the events.  This is in contrast to monologue's sister library, [postal.js](https://github.com/postaljs/postal.js), which uses the mediator pattern to relieve publishers and subscribers from the need to have a direct reference to each other.  Putting a monologue instance in the prototype chain of an object turns  it into an "event emitter". This is incredibly useful in organizing how other *local* (within a limited scope/module) instances are notified of something the object wants to publish. monologue is designed to be bridged with [postal.js](https://github.com/postaljs/postal.js) if you want to 'promote' an event into an app-level message - and the [monopost](https://github.com/postaljs/monopost.js) add-on exists to do just that.  
+monologue's pub/sub implementation uses the observer pattern - meaning that subscribers should have a direct reference to the 'monologue-ized' object emitting the events.  This is in contrast to monologue's sister library, [postal.js](https://github.com/postaljs/postal.js), which uses the mediator pattern to relieve publishers and subscribers from the need to have a direct reference to each other.  Putting a monologue instance in the prototype chain of an object turns  it into an "event emitter". This is incredibly useful in organizing how other *local* (within a limited scope/module) instances are notified of something the object wants to publish. monologue is designed to be bridged with [postal.js](https://github.com/postaljs/postal.js) if you want to 'promote' an event into an app-level message - and the [monopost](https://github.com/postaljs/monopost.js) add-on exists to do just that.
 
 ##### Really? Another Event Emitter?
 I know, right?!  There are a number of EventEmitter implementations that are very useful (and compact) - my favorite of which is [EventEmitter2](https://github.com/hij1nx/EventEmitter2). So why did I write monologue? Three main reasons:
@@ -19,7 +19,7 @@ If you want to extend your objects with the ability to trigger custom events, ta
 ### How do I use it?
 ##### Adding monologue functionality to an instance
 
-You can use the `mixin` helper function, which mixes Monologue into the prototype of your object:
+You can use the `mixInto` helper function, which mixes Monologue into the prototype of your object:
 
 	var Worker = function(name) {
 	    this.name = name;
@@ -27,7 +27,7 @@ You can use the `mixin` helper function, which mixes Monologue into the prototyp
 	Worker.prototype.doWork = function() {
 	    this.emit("work.done", { who: this.name });
 	};
-	Monologue.mixin(Worker);
+	Monologue.mixInto(Worker);
 
 
 You can also manually put a monologue instance in the prototype chain of an object:

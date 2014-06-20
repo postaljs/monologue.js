@@ -119,5 +119,5 @@ Monologue.debug = false;
 Monologue.SubscriptionDefinition = SubscriptionDefinition;
 riveter(Monologue);
 Monologue.mixInto = function(target) {
-    riveter.mixin(target, Monologue.prototype);
+    riveter.punch(target, Monologue.prototype);
 };

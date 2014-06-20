@@ -66,3 +66,20 @@ describe("Inheriting From Monologue via riveter", function() {
     });
 
 });
+
+describe("When calling Monologue.mixInto", function() {
+    var MyStuff = function() {};
+
+    MyStuff.prototype.emit = function() {
+        return "Old Emit";
+    };
+
+    Monologue.mixInto(MyStuff);
+
+    var instance = new MyStuff();
+
+    it("MyStuff should have Monologue's methods.", function() {
+        expect(instance.emit()).to.not.be.ok();
+    });
+
+});
