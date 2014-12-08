@@ -49,7 +49,7 @@
     "devDependencies": {
         "bower": "~1.2.8",
         "gulp-util": "~2.2.9",
-        "gulp": "~3.6.1",
+        "gulp": "~3.8.10",
         "gulp-imports": "~0.0.1",
         "gulp-header": "~1.0.2",
         "gulp-hint-not": "~0.0.3",
