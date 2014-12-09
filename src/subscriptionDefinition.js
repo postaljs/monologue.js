@@ -7,14 +7,6 @@ var SubscriptionDefinition = function( topic, callback, emitter ) {
 	this.emitter = emitter;
 };
 
-
-// var SubscriptionDefinition = function ( topic, callback, emitter ) {
-// 	this.topic = topic;
-// 	this.callback = callback;
-// 	this.context = null;
-// 	this.emitter = emitter;
-// };
-
 var ConsecutiveDistinctPredicate = function() {
 	var previous;
 	return function( data ) {
