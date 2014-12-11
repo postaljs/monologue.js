@@ -1,85 +1,83 @@
-/*global describe,it*/
-var Monologue = typeof window === "undefined" ? require("../lib/monologue.js") : window.Monologue;
-var expect = typeof window === "undefined" ? require("expect.js") : window.expect;
-var riveter = typeof window === "undefined" ? require("riveter") : window.riveter;
-describe("Extending From Monologue", function() {
-    var MyStuff = Monologue.extend({
-        prop: "some value",
-        foo: function() {
-            this.emit("bar");
-        }
-    });
+/*global describe,it, Monologue, riveter*/
 
-    var instance = new MyStuff(),
-        emitted = false;
+describe( "Extending From Monologue", function() {
+	var MyStuff = Monologue.extend( {
+		prop: "some value",
+		foo: function() {
+			this.emit( "bar" );
+		}
+	} );
 
-    instance.on("bar", function() {
-        emitted = true;
-    });
+	var instance = new MyStuff(),
+		emitted = false;
 
-    instance.foo();
+	instance.on( "bar", function() {
+		emitted = true;
+	} );
 
-    it("Child should extend from Monologue", function() {
-        expect(instance).to.have.property("on");
-        expect(instance).to.have.property("once");
-        expect(instance).to.have.property("off");
-        expect(instance).to.have.property("emit");
-        expect(instance).to.have.property("getEnvelope");
-        expect(instance).to.have.property("prop");
-        expect(instance.prop).to.be("some value");
-        expect(emitted).to.be(true);
-    });
+	instance.foo();
 
-});
+	it( "Child should extend from Monologue", function() {
+		instance.should.have.property( "on" );
+		instance.should.have.property( "once" );
+		instance.should.have.property( "off" );
+		instance.should.have.property( "emit" );
+		instance.should.have.property( "getEnvelope" );
+		instance.should.have.property( "prop" );
+		instance.prop.should.equal( "some value" );
+		emitted.should.equal( true );
+	} );
 
-describe("Inheriting From Monologue via riveter", function() {
-    var MyStuff = function() {
-        this.prop = "some value";
-    };
+} );
 
-    MyStuff.prototype.foo = function() {
-        this.emit("bar");
-    };
+describe( "Inheriting From Monologue via riveter", function() {
+	var MyStuff = function() {
+		this.prop = "some value";
+	};
 
-    riveter(MyStuff);
+	MyStuff.prototype.foo = function() {
+		this.emit( "bar" );
+	};
 
-    MyStuff.inherits(Monologue);
+	riveter( MyStuff );
 
-    var instance = new MyStuff(),
-        emitted = false;
+	MyStuff.inherits( Monologue );
 
-    instance.on("bar", function() {
-        emitted = true;
-    });
+	var instance = new MyStuff(),
+		emitted = false;
 
-    instance.foo();
+	instance.on( "bar", function() {
+		emitted = true;
+	} );
 
-    it("Child should inherit Monologue", function() {
-        expect(instance).to.have.property("on");
-        expect(instance).to.have.property("once");
-        expect(instance).to.have.property("off");
-        expect(instance).to.have.property("emit");
-        expect(instance).to.have.property("getEnvelope");
-        expect(instance).to.have.property("prop");
-        expect(instance.prop).to.be("some value");
-        expect(emitted).to.be(true);
-    });
+	instance.foo();
 
-});
+	it( "Child should inherit Monologue", function() {
+		instance.should.have.property( "on" );
+		instance.should.have.property( "once" );
+		instance.should.have.property( "off" );
+		instance.should.have.property( "emit" );
+		instance.should.have.property( "getEnvelope" );
+		instance.should.have.property( "prop" );
+		instance.prop.should.equal( "some value" );
+		emitted.should.equal( true );
+	} );
 
-describe("When calling Monologue.mixInto", function() {
-    var MyStuff = function() {};
+} );
 
-    MyStuff.prototype.emit = function() {
-        return "Old Emit";
-    };
+describe( "When calling Monologue.mixInto", function() {
+	var MyStuff = function() {};
 
-    Monologue.mixInto(MyStuff);
+	MyStuff.prototype.emit = function() {
+		return "Old Emit";
+	};
 
-    var instance = new MyStuff();
+	Monologue.mixInto( MyStuff );
 
-    it("MyStuff should have Monologue's methods.", function() {
-        expect(instance.emit()).to.not.be.ok();
-    });
+	var instance = new MyStuff();
 
-});
+	it( "MyStuff should have Monologue's methods.", function() {
+		instance.emit.should.equal( Monologue.prototype.emit );
+	} );
+
+} );

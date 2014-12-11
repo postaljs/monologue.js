@@ -122,16 +122,10 @@ SubscriptionDefinition.prototype = {
 		return this.disposeAfter( 1 );
 	},
 
-	subscribe: function subscribe( callback ) {
-		this.callback = callback;
-		return this;
-	},
-
 	unsubscribe: function() {
 		/* istanbul ignore else */
 		if ( !this.inactive ) {
-			this.inactive = true;
-			this.emitter._subscriptions[ this.topic ] = _.without( this.emitter._subscriptions[ this.topic ], this );
+			this.emitter.off( this );
 		}
 	},
 
@@ -206,6 +200,7 @@ SubscriptionDefinition.prototype = {
 SubscriptionDefinition.prototype.off = SubscriptionDefinition.prototype.unsubscribe;
 // Backwards Compatibility
 // WARNING: these will be removed after the next version
+/* istanbul ignore next */
 function warnOnDeprecation( oldMethod, newMethod ) {
 	return function() {
 		if ( console.warn || console.log ) {

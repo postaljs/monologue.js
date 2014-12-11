@@ -1,6 +1,5 @@
-/*global describe,it,afterEach,beforeEach*/
-var Monologue = typeof window === "undefined" ? require( "../lib/monologue.js" ) : window.Monologue;
-var expect = typeof window === "undefined" ? require( "expect.js" ) : window.expect;
+/*global describe,it,afterEach,beforeEach, Monologue */
+
 function monoFactory() {
 	return new Monologue();
 }
@@ -19,10 +18,54 @@ describe( "Subscription Definition Options", function() {
 
 		it( "Should invoke the callback when the event loop is free", function( done ) {
 			sub = monologue.on( "Some.Topic", function( data ) {
-				expect( data ).to.be( "Hai**" );
+				data.should.equal( "Hai**" );
 				done();
 			} ).defer();
 			monologue.emit( "Some.Topic", "Hai**" );
+		} );
+	} );
+
+	describe( "when subscribing with `logError`", function() {
+		var monologue;
+		beforeEach( function() {
+			monologue = monoFactory();
+		} );
+		afterEach( function() {
+			sub.unsubscribe();
+		} );
+		it( "should log exceptions to the console", function() {
+			var _log = console.log;
+			var _warn = console.warn;
+			var err;
+			console.log = function() {
+				err = Array.prototype.slice.call( arguments, 0 ).join( " " );
+			};
+			console.warn = function() {
+				err = Array.prototype.slice.call( arguments, 0 ).join( " " );
+			};
+			monologue.on( "Some.Topic", function() {
+				throw new Error( "Oopsies" );
+			} ).catch().logError();
+			monologue.emit( "Some.Topic", "Hai**" );
+			err.should.be.ok; //jshint ignore:line
+			console.log = _log;
+			console.warn = _warn;
+		} );
+		it( "should fallback to console.log if console.warn is undefined", function() {
+			var _log = console.log;
+			var _warn = console.warn;
+			var err;
+			console.log = function() {
+				err = Array.prototype.slice.call( arguments, 0 ).join( " " );
+			};
+			console.warn = undefined;
+			monologue.on( "Some.Topic", function() {
+				throw new Error( "Oopsies" );
+			} ).catch().logError();
+			monologue.emit( "Some.Topic", "Hai**" );
+			err.should.be.ok; //jshint ignore:line
+			console.log = _log;
+			console.warn = _warn;
 		} );
 	} );
 
@@ -44,7 +87,7 @@ describe( "Subscription Definition Options", function() {
 				nm = this.name;
 			} ).context( obj );
 			monologue.emit( "Some.Topic", "Hai" );
-			expect( nm ).to.be( "Paul" );
+			nm.should.equal( "Paul" );
 		} );
 	} );
 
@@ -66,7 +109,7 @@ describe( "Subscription Definition Options", function() {
 				} ).disposeAfter( 1 );
 				monologue.emit( "Some.Topic", "Hai" );
 				monologue.emit( "Some.Topic", "Hai" );
-				expect( count ).to.be( 1 );
+				count.should.equal( 1 );
 			} );
 
 		} );
@@ -89,7 +132,7 @@ describe( "Subscription Definition Options", function() {
 				monologue.emit( "Some.Topic", "Hai" );
 				monologue.emit( "Some.Topic", "Hai" );
 				monologue.emit( "Some.Topic", "Hai" );
-				expect( count ).to.be( 3 );
+				count.should.equal( 3 );
 			} );
 
 		} );
@@ -117,28 +160,75 @@ describe( "Subscription Definition Options", function() {
 			} ).context( obj ).disposeAfter( 1 );
 			monologue.emit( "Some.Topic", "Hai" );
 			monologue.emit( "Some.Topic", "Hai" );
-			expect( nm ).to.be( "Paul" );
-			expect( count ).to.be( 1 );
+			nm.should.equal( "Paul" );
+			count.should.equal( 1 );
+		} );
+		it( "Should throw an exception if the disposeAfter argument is not a number", function() {
+			try {
+				monologue.on( "Some.Topic", function() {} ).context( obj ).disposeAfter( "fantastic" );
+			} catch (ex) {
+				ex.should.be.instanceOf( Error );
+			}
+
 		} );
 	} );
 
 	describe( "When calling once()", function() {
+		describe( "On the SubscriptionDefinition", function() {
+			var monologue;
+			var count = 0;
+			beforeEach( function() {
+				monologue = monoFactory();
+			} );
+			afterEach( function() {
+				sub.unsubscribe();
+			} );
+
+			it( "Should unsubscribe the callback after 1 invocation", function() {
+				sub = monologue.on( "Some.Topic", function() {
+					count++;
+				} ).once();
+				monologue.emit( "Some.Topic", "Hai" );
+				monologue.emit( "Some.Topic", "Hai" );
+				count.should.equal( 1 );
+			} );
+		} );
+		describe( "On the Monologue instance", function() {
+			var monologue;
+			var count = 0;
+			beforeEach( function() {
+				monologue = monoFactory();
+			} );
+			afterEach( function() {
+				sub.unsubscribe();
+			} );
+
+			it( "Should unsubscribe the callback after 1 invocation", function() {
+				sub = monologue.once( "Some.Topic", function() {
+					count++;
+				} );
+				monologue.emit( "Some.Topic", "Hai" );
+				monologue.emit( "Some.Topic", "Hai" );
+				count.should.equal( 1 );
+			} );
+		} );
+	} );
+
+	describe( "When subscribing with catch()", function() {
 		var monologue;
-		var count = 0;
 		beforeEach( function() {
 			monologue = monoFactory();
 		} );
 		afterEach( function() {
 			sub.unsubscribe();
 		} );
-
-		it( "Should unsubscribe the callback after 1 invocation", function() {
-			sub = monologue.on( "Some.Topic", function() {
-				count++;
-			} ).disposeAfter( 1 );
+		it( "should catch an exception thrown by a subscriber", function() {
+			monologue.on( "Some.Topic", function() {
+				throw new Error( "Oopsies" );
+			} ).catch( function( e ) {
+				( e instanceof Error ).should.equal( true );
+			} );
 			monologue.emit( "Some.Topic", "Hai" );
-			monologue.emit( "Some.Topic", "Hai" );
-			expect( count ).to.be( 1 );
 		} );
 	} );
 
@@ -165,10 +255,10 @@ describe( "Subscription Definition Options", function() {
 				monologue.emit( "Some.Topic", "Hai" );
 				monologue.emit( "Some.Topic", "I SEZ HAI!" );
 				monologue.emit( "Some.Topic", "Hai" );
-				expect( events.length ).to.be( 3 );
-				expect( events[ 0 ] ).to.be( "Hai" );
-				expect( events[ 1 ] ).to.be( "I SEZ HAI!" );
-				expect( events[ 2 ] ).to.be( "Hai" );
+				events.length.should.equal( 3 );
+				events[ 0 ].should.equal( "Hai" );
+				events[ 1 ].should.equal( "I SEZ HAI!" );
+				events[ 2 ].should.equal( "Hai" );
 			} );
 		} );
 
@@ -202,14 +292,14 @@ describe( "Subscription Definition Options", function() {
 				monologue.emit( "Some.Topic", {
 					name: "Paul McCartney"
 				} );
-				expect( events.length ).to.be( 3 );
-				expect( events[ 0 ] ).to.eql( {
+				events.length.should.equal( 3 );
+				events[ 0 ].should.eql( {
 					name: "Paul McCartney"
 				} );
-				expect( events[ 1 ] ).to.eql( {
+				events[ 1 ].should.eql( {
 					name: "John Lennon"
 				} );
-				expect( events[ 2 ] ).to.eql( {
+				events[ 2 ].should.eql( {
 					name: "Paul McCartney"
 				} );
 			} );
@@ -241,9 +331,9 @@ describe( "Subscription Definition Options", function() {
 				monologue.emit( "Some.Topic", "I SEZ HAI!" );
 				monologue.emit( "Some.Topic", "Hai" );
 				monologue.emit( "Some.Topic", "I SEZ HAI!" );
-				expect( events.length ).to.be( 2 );
-				expect( events[ 0 ] ).to.be( "Hai" );
-				expect( events[ 1 ] ).to.be( "I SEZ HAI!" );
+				events.length.should.equal( 2 );
+				events[ 0 ].should.equal( "Hai" );
+				events[ 1 ].should.equal( "I SEZ HAI!" );
 			} );
 		} );
 
@@ -280,13 +370,47 @@ describe( "Subscription Definition Options", function() {
 				monologue.emit( "Some.Topic", {
 					name: "John Lennon"
 				} );
-				expect( events.length ).to.be( 2 );
-				expect( events[ 0 ] ).to.eql( {
+				events.length.should.equal( 2 );
+				events[ 0 ].should.eql( {
 					name: "Paul McCartney"
 				} );
-				expect( events[ 1 ] ).to.eql( {
+				events[ 1 ].should.eql( {
 					name: "John Lennon"
 				} );
+			} );
+		} );
+
+		describe( "When publishing an array", function() {
+			var monologue;
+			beforeEach( function() {
+				events = [];
+				monologue = monoFactory();
+				sub = monologue.on( "Some.Topic", function( data ) {
+					events.push( data );
+				} ).distinct();
+			} );
+
+			afterEach( function() {
+				sub.unsubscribe();
+			} );
+
+			it( "Should unsubscribe the callback after 1 invocation", function() {
+				monologue.emit( "Some.Topic", [ "Paul McCartney", "George Harrison" ] );
+				monologue.emit( "Some.Topic", [ "Paul McCartney", "George Harrison" ] );
+				monologue.emit( "Some.Topic", [ "John Lennon", "Ringo Starr" ] );
+				monologue.emit( "Some.Topic", [ "Paul McCartney", "George Harrison" ] );
+				monologue.emit( "Some.Topic", [ "John Lennon", "Ringo Starr" ] );
+				monologue.emit( "Some.Topic", [ "Paul McCartney" ] );
+				monologue.emit( "Some.Topic", [ "John Lennon" ] );
+				monologue.emit( "Some.Topic", [ "John Lennon" ] );
+				monologue.emit( "Some.Topic", [ "Paul McCartney" ] );
+				events.length.should.equal( 4 );
+				events.should.eql( [
+					[ "Paul McCartney", "George Harrison" ],
+					[ "John Lennon", "Ringo Starr" ],
+					[ "Paul McCartney" ],
+					[ "John Lennon" ]
+				] );
 			} );
 		} );
 
@@ -319,12 +443,52 @@ describe( "Subscription Definition Options", function() {
 			monologue.emit( "Some.Topic", {
 				name: "John Lennon"
 			} );
-			expect( events.length ).to.be( 1 );
-			expect( events[ 0 ] ).to.eql( {
+			events.length.should.equal( 1 );
+			events[ 0 ].should.eql( {
 				name: "Paul McCartney"
 			} );
 		} );
+		it( "should throw an exception if the value provided is not a function", function() {
+			try {
+				monologue.on( "Some.Topic", function() {} ).constraint( 123 );
+			} catch (ex) {
+				ex.should.be.instanceOf( Error );
+			}
+		} );
+	} );
 
+	describe( "When calling constraints()", function() {
+		var monologue;
+		var events = [];
+		var count = 0;
+		beforeEach( function() {
+			events = [];
+			monologue = monoFactory();
+			sub = monologue.on( "Some.Topic", function( data ) {
+				events.push( data );
+			} ).constraints( [ function() {
+					var cnt = count;
+					count += 1;
+					return cnt === 0;
+			} ] );
+		} );
+
+		afterEach( function() {
+			sub.unsubscribe();
+		} );
+
+		it( "Should unsubscribe the callback after 1 invocation", function() {
+			monologue.emit( "Some.Topic", {
+				name: "Paul McCartney"
+			} );
+			monologue.emit( "Some.Topic", {
+				name: "John Lennon"
+			} );
+			events.length.should.equal( 1 );
+			events[ 0 ].should.eql( {
+				name: "Paul McCartney"
+			} );
+		} );
 	} );
 
 	describe( "When calling debounce", function() {
@@ -364,13 +528,20 @@ describe( "Subscription Definition Options", function() {
 				} );
 			}, 750 ); // should not invoke callback
 			setTimeout( function() {
-				expect( events[ 0 ] ).to.eql( {
+				events[ 0 ].should.eql( {
 					name: "Ringo Starkey"
 				} );
-				expect( events.length ).to.be( 1 );
+				events.length.should.equal( 1 );
 				sub.unsubscribe();
 				done();
 			}, 1500 );
+		} );
+		it( "should throw an exception if the value provided is not a number", function() {
+			try {
+				monologue.on( "Some.Topic", function() {} ).debounce( "bouncey bounce" );
+			} catch (ex) {
+				ex.should.be.instanceOf( Error );
+			}
 		} );
 	} );
 
@@ -391,13 +562,20 @@ describe( "Subscription Definition Options", function() {
 				name: "Help!"
 			} ); // starts the clock on debounce
 			setTimeout( function() {
-				expect( events[ 0 ] ).to.eql( {
+				events[ 0 ].should.eql( {
 					name: "Help!"
 				} );
-				expect( events.length ).to.be( 1 );
+				events.length.should.equal( 1 );
 				sub.unsubscribe();
 				done();
 			}, 600 );
+		} );
+		it( "should throw an exception if the value provided is not a number", function() {
+			try {
+				monologue.on( "Some.Topic", function() {} ).delay( "wait a bit" );
+			} catch (ex) {
+				ex.should.be.instanceOf( Error );
+			}
 		} );
 	} );
 
@@ -427,9 +605,16 @@ describe( "Subscription Definition Options", function() {
 				fn();
 			}
 			setTimeout( function() {
-				expect( events.length ).to.be( 1 );
+				events.length.should.equal( 1 );
 				done();
 			}, 800 );
+		} );
+		it( "should throw an exception if the value provided is not a number", function() {
+			try {
+				monologue.on( "Some.Topic", function() {} ).throttle( "whoa buddy" );
+			} catch (ex) {
+				ex.should.be.instanceOf( Error );
+			}
 		} );
 	} );
 

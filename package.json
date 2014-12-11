@@ -1,77 +1,90 @@
 {
-    "name": "monologue.js",
-    "description": "EventEmitter replacement with AMQP-style bindings and other advanced features. Compatible with postal.js's API.",
-    "version": "0.2.1",
-    "homepage": "https://github.com/postaljs/monologue.js",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/postaljs/monologue.js.git"
+  "name": "monologue.js",
+  "description": "EventEmitter replacement with AMQP-style bindings and other advanced features. Compatible with postal.js's API.",
+  "version": "0.3.0",
+  "homepage": "https://github.com/postaljs/monologue.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/postaljs/monologue.js.git"
+  },
+  "author": "Jim Cowart (http://freshbrewedcode.com/jimcowart)",
+  "contributors": [
+    {
+      "name": "Jim Cowart",
+      "email": "jim@ifandelse.com",
+      "url": "http://freshbrewedcode.com/jimcowart"
     },
-    "author": "Jim Cowart (http://freshbrewedcode.com/jimcowart)",
-    "contributors": [{
-        "name": "Jim Cowart",
-        "email": "jim@ifandelse.com",
-        "url": "http://freshbrewedcode.com/jimcowart"
-    }, {
-        "name": "Doug Neiner",
-        "email": "WhyNotJustComment@OnMyBlog.com",
-        "url": "http://dougneiner.com"
-    }],
-    "keywords": [
-        "monologue",
-        "postal",
-        "observer",
-        "event",
-        "emitter",
-        "pub/sub",
-        "listener",
-        "publisher",
-        "EventEmitter",
-        "pub",
-        "sub",
-        "eventing"
-    ],
-    "bugs": {
-        "email": "jim@ifandelse.com",
-        "url": "http://github.com/postaljs/monologue.js/issues"
-    },
-    "directories": {
-        "lib": "lib"
-    },
-    "main": "lib/monologue.js",
-    "engines": {
-        "node": ">=0.4.0"
-    },
-    "dependencies": {
-        "lodash": ">=2.4.1",
-        "riveter": "git://github.com/ifandelse/riveter.git#0cffebb92117c88543cb4359fb9fd69c2d65dd22"
-    },
-    "devDependencies": {
-        "bower": "~1.2.8",
-        "gulp-util": "~2.2.9",
-        "gulp": "~3.8.10",
-        "gulp-imports": "~0.0.1",
-        "gulp-header": "~1.0.2",
-        "gulp-hint-not": "~0.0.3",
-        "gulp-uglify": "^0.3.0",
-        "gulp-rename": "^1.2.0",
-        "gulp-plato": "^0.2.1",
-        "gulp-beautify": "~1.0.3",
-        "express": "~3.4.7",
-        "open": "~0.0.4",
-        "expect.js": "~0.2.0",
-        "mocha": "~1.19.0"
-    },
-    "licenses": [{
-        "type": "MIT",
-        "url": "http://www.opensource.org/licenses/mit-license.php"
-    }, {
-        "type": "GPL",
-        "url": "http://www.opensource.org/licenses/gpl-3.0.html"
-    }],
-    "scripts": {
-        "test": "mocha ./spec/*.js",
-        "build": "gulp",
-        "start": "gulp server"
+    {
+      "name": "Doug Neiner",
+      "email": "WhyNotJustComment@OnMyBlog.com",
+      "url": "http://dougneiner.com"
     }
+  ],
+  "keywords": [
+    "monologue",
+    "postal",
+    "observer",
+    "event",
+    "emitter",
+    "pub/sub",
+    "listener",
+    "publisher",
+    "EventEmitter",
+    "pub",
+    "sub",
+    "eventing"
+  ],
+  "bugs": {
+    "email": "jim@ifandelse.com",
+    "url": "http://github.com/postaljs/monologue.js/issues"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "main": "lib/monologue.js",
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "dependencies": {
+    "lodash": ">=2.4.1",
+    "riveter": "git://github.com/ifandelse/riveter.git#0cffebb92117c88543cb4359fb9fd69c2d65dd22"
+  },
+  "devDependencies": {
+    "bower": "~1.2.8",
+    "expect.js": "~0.2.0",
+    "express": "~3.4.7",
+    "gulp": "~3.8.10",
+    "gulp-beautify": "~1.0.3",
+    "gulp-header": "~1.0.2",
+    "gulp-hint-not": "~0.0.3",
+    "gulp-imports": "~0.0.1",
+    "gulp-plato": "^0.2.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-spawn-mocha": "^0.5.1",
+    "gulp-uglify": "^0.3.0",
+    "gulp-util": "~2.2.9",
+    "istanbul": "^0.3.2",
+    "karma": "^0.12.24",
+    "mocha": "^2.0.1",
+    "open": "~0.0.4",
+    "should": "^4.3.1",
+    "sinon": "~1.11.1"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    },
+    {
+      "type": "GPL",
+      "url": "http://www.opensource.org/licenses/gpl-3.0.html"
+    }
+  ],
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha -r spec/helpers/node-setup.js spec",
+    "start": "gulp server",
+    "build": "gulp",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -x 'spec/**/*'  -- -r spec/helpers/node-setup.js spec spec/*.spec.js",
+    "show-coverage": "open ./coverage/lcov-report/index.html"
+  }
 }

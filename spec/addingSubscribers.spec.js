@@ -1,6 +1,4 @@
-/*global describe,it,afterEach,beforeEach */
-var Monologue = typeof window === "undefined" ? require( "../lib/monologue.js" ) : window.Monologue;
-var expect = typeof window === "undefined" ? require( "expect.js" ) : window.expect;
+/*global describe,it,afterEach,beforeEach,Monologue */
 
 describe( "Adding Subscriptions", function() {
 
@@ -19,17 +17,17 @@ describe( "Adding Subscriptions", function() {
 	} );
 
 	it( "It should return a SubscriptionDefinition instance", function() {
-		expect( sub ).to.have.property( "topic" );
-		expect( sub ).to.have.property( "callback" );
-		expect( sub ).to.have.property( "context" );
-		expect( sub ).to.have.property( "once" );
-		expect( sub ).to.have.property( "disposeAfter" );
-		expect( sub ).to.have.property( "defer" );
-		expect( sub ).to.have.property( "context" );
+		sub.should.have.property( "topic" );
+		sub.should.have.property( "callback" );
+		sub.should.have.property( "context" );
+		sub.should.have.property( "once" );
+		sub.should.have.property( "disposeAfter" );
+		sub.should.have.property( "defer" );
+		sub.should.have.property( "context" );
 	} );
 
 	it( "It should add the SubscriptionDefinition to the monologue._subscriptions", function() {
-		expect( monologue._subscriptions[ "Some.Topic" ][ 0 ] ).to.eql( sub );
+		monologue._subscriptions[ "Some.Topic" ][ 0 ].should.eql( sub );
 	} );
 
 } );

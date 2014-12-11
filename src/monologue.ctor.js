@@ -25,13 +25,14 @@ function getCachePurger( subDef, topic, cache ) {
 	};
 }
 
-function removeSubscriber( subDef, emitter ) {
-	subDef.unsubscribe();
+function removeSubscriber( subDef, emitter, idx, list ) {
+	subDef.inactive = true;
+	list.splice( idx, 1 );
 	// remove SubscriptionDefinition from cache
 	if ( subDef.cacheKeys && subDef.cacheKeys.length ) {
 		var key;
 		while (key = subDef.cacheKeys.pop()) {
-			_.each( emitter.cache[ key ], getCachePurger( subDef, key, emitter.cache ) );
+			_.each( emitter._cache[ key ], getCachePurger( subDef, key, emitter._cache ) );
 		}
 	}
 }
@@ -41,13 +42,12 @@ Monologue.prototype = {
 		var self = this;
 		self._subscriptions = self._subscriptions || {};
 		self._subscriptions[ topic ] = self._subscriptions[ topic ] || [];
-		self._subscriptions[ topic ].push( new SubscriptionDefinition( topic, callback, self ) );
+		var subDef = new SubscriptionDefinition( topic, callback, self );
+		self._subscriptions[ topic ].push( subDef );
 
 		// Next, add the SubscriptionDefinition to any relevant existing cache(s)
-		_.each( this.cache, function( list, cacheKey ) {
-			if ( cacheKey === topic ) {
-				getCacher( topic, list )( subDef );
-			}
+		_.each( self._cache, function( list ) {
+			getCacher( topic, list )( subDef );
 		} );
 
 		return self._subscriptions[ topic ][ self._subscriptions[ topic ].length - 1 ];
@@ -63,9 +63,9 @@ Monologue.prototype = {
 		self._cache = self._cache || {};
 		switch (arguments.length) {
 			case 0:
-				_.each( self._subscriptions, function( topic ) {
-					_.each( topic, function( subDef ) {
-						removeSubscriber( subDef );
+				_.each( self._subscriptions, function( tpc ) {
+					_.each( tpc, function( subDef, idx ) {
+						removeSubscriber( subDef, self, idx, tpc );
 					} );
 				} );
 				self._subscriptions = {};
@@ -75,31 +75,34 @@ Monologue.prototype = {
 				switch (type) {
 					case "topic":
 						if ( self._subscriptions[ topic ] ) {
-							while (self._subscriptions[ topic ].length) {
-								removeSubscriber( self._subscriptions[ topic ].pop() );
-							}
+							_.each( self._subscriptions[ topic ], function( subDef, idx ) {
+								removeSubscriber( subDef, self, idx, self._subscriptions[ topic ] );
+							} );
 						}
 						break;
 					case "context":
 						_.each( self._subscriptions, function( subs ) {
 							_.each( _.clone( subs ), function( subDef, idx ) {
 								if ( subDef._context === topic ) {
-									removeSubscriber( subDef );
-									subs.splice( idx, 1 );
+									removeSubscriber( subDef, self, idx, subs );
 								}
 							} );
 						} );
 						break;
 					default:
-						removeSubscriber( topic );
+						// topic arg is the subDef in this case....
+						_.each( self._subscriptions[ topic.topic ], function( subDef, idx ) {
+							if ( subDef === topic ) {
+								removeSubscriber( subDef, self, idx, self._subscriptions[ topic.topic ] );
+							}
+						} );
 						break;
 				}
 				break;
 			default:
 				_.each( _.clone( self._subscriptions[ topic ] ), function( subDef, idx ) {
 					if ( subDef._context === context ) {
-						removeSubscriber( subDef );
-						self._subscriptions[ topic ].splice( idx, 1 );
+						removeSubscriber( subDef, self, idx, self._subscriptions[ topic ] );
 					}
 				} );
 				break;
