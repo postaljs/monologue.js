@@ -7,12 +7,12 @@
     "type": "git",
     "url": "git://github.com/postaljs/monologue.js.git"
   },
-  "author": "Jim Cowart (http://freshbrewedcode.com/jimcowart)",
+  "author": "Jim Cowart (http://ifandelse.com)",
   "contributors": [
     {
       "name": "Jim Cowart",
       "email": "jim@ifandelse.com",
-      "url": "http://freshbrewedcode.com/jimcowart"
+      "url": "http://ifandelse.com"
     },
     {
       "name": "Doug Neiner",
