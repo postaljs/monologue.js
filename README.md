@@ -11,7 +11,7 @@ I know, right?!  There are a number of EventEmitter implementations that are ver
 
 * **I wanted postal/AMQP-like wildcard binding semantics.**  The "*" wildcard matches exactly one word in a topic, while the "#" wildcard matches 0-n words.
 * **I prefer an "envelope" payload in an event vs passing 0-n arguments to a subscriber callback.**  This means we get a consistent callback signature everywhere. Consistency causes kittens to turn into angels and get their wings.
-* **I wanted safe invocation of subscriber callbacks.** Most Event Emitter style implementations (that I've seen) blindly fire the subscriber callback - and if the callback throws an uncaught exception, the entire event-emit breaks. "But won't a try/catch slow things down?" Yes, there is a performance hit. I've asked myself these two questions: How many times has an event emitter been the bottleneck in my app? And how many times has a subscriber callback been guilty of tanking the app? In my experience, the latter happens **far more often** than the former. 
+* **I wanted to have a choice to opt-into safe invocation of subscriber callbacks.** Most Event Emitter style implementations (that I've seen) blindly fire the subscriber callback - and if the callback throws an uncaught exception, the entire event-emit breaks. "But won't a try/catch slow things down?" Yes, there is a performance hit, that's why it's something you opt-into. (I've asked myself these two questions: How many times has an event emitter been the bottleneck in my app? And how many times has a subscriber callback been guilty of tanking the app? In my experience, the latter happens **far more often** than the former.)
 
 ### Why should I use it?
 If you want to extend your objects with the ability to trigger custom events, take advantage of the wildcard binding options, trust that subscriber callbacks can't tank the emitter while it's triggering events, and/or have consistent callback signatures, then monologue might be for you.
@@ -71,13 +71,13 @@ argument is simply the data published when the event was emitted.  The `envelope
 
 	// pretending we're somewhere else setting up the subscriber:
 	var subscription = instance.on("some.event", function(data, envelope){
-		/* 
+		/*
 		  data would look like:
 			{
 				foo: 'bar',
 				baz: 'bacon'
 			}
-			
+
 		  envelope would look like:
 		  	{
 		  		topic: 'some.event',
@@ -87,8 +87,8 @@ argument is simply the data published when the event was emitted.  The `envelope
 					baz: 'bacon'
 				}
 			}
-		*/    
-	});	
+		*/
+	});
 
 #####Wildcard Subscriptions
 As mentioned above, the `*` and `#` characters represent wildcards available when you subscribe to events. Topics are string values, and are often period-delimited. The part of the topic delimited by a period is called a 'word'. Using a `*` represents exactly one word in a topic, while the `#` character matches 0-n words.  For example:
@@ -183,7 +183,7 @@ As mentioned above - the `SubscriptionDefinition` object returned from a call to
 ######Customizing the Envelope
 Any object that has been extended with Monologue's behavior will have a `getEnvelope` method which you can override to customize how the envelope is created. The default implementation looks like this:
 
-	
+
 	// The default implementation just marks the envelope with a time stamp.
 	// The topic and data are attached to the envelope just before it's published
 	getEnvelope: function(topic, data) {
