@@ -7,6 +7,39 @@ describe( "Emitting Events", function() {
 	var subA, subB, subAFired, subBFired;
 	var events, envs;
 
+    describe( "Lookup Cache", function(){
+        var monologue;
+        beforeEach( function() {
+            monologue = new monoFactory();
+            events = [];
+            envs = [];
+            subAFired = 0;
+            subBFired = 0;
+            monologue.emit( "transition", "Yo->Yolo" );
+            subA = monologue.on( "transition", function( data, env ) {
+                events.push( data );
+                envs.push( env );
+                subAFired += 1;
+            } );
+            subB = monologue.on( "Yeppers", function( data, env ) {
+                events.push( data );
+                envs.push( env );
+                subBFired += 1;
+            } );
+            monologue.emit( "transition", "Yo->Yolo" );
+        } );
+
+        afterEach( function() {
+            subA.unsubscribe();
+            subB.unsubscribe();
+            monologue.off();
+        } );
+        it("should properly populate lookup cache", function() {
+            subAFired.should.equal(1);
+            subBFired.should.equal(0);
+        });
+    });
+
 	describe( "With plain topic matching", function() {
 		var monologue;
 		beforeEach( function() {
