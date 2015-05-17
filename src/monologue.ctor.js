@@ -46,8 +46,8 @@ Monologue.prototype = {
 		self._subscriptions[ topic ].push( subDef );
 
 		// Next, add the SubscriptionDefinition to any relevant existing cache(s)
-		_.each( self._cache, function( list ) {
-			getCacher( topic, list )( subDef );
+		_.each( self._cache, function( list, key ) {
+			getCacher( key, list )( subDef );
 		} );
 
 		return self._subscriptions[ topic ][ self._subscriptions[ topic ].length - 1 ];
