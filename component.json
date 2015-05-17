@@ -1,9 +1,9 @@
 {
     "name": "monologue",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "main": ["lib/monologue.js"],
     "dependencies": {
-        "lodash": "~2.4.1",
+        "lodash": "3.x",
         "riveter": "git://github.com/ifandelse/riveter.git#0cffebb92117c88543cb4359fb9fd69c2d65dd22"
     }
 }

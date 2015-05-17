@@ -53,7 +53,7 @@ An alternative approach would be to 'mix-in' to an existing instance via a helpe
 
 monologue uses [riveter](https://github.com/ifandelse/riveter) for it's inheritance/mixin capabilities. There's a *lot* you can do with riveter, so check it out.
 
-#####Adding an event listener
+##### Adding an event listener
 Any object that has monologue's behavior has an `on` method which can be used to subscribe to events.  The first argument of `on()` is the `topic` (just a string event name, which can optionally be a period-delimited string for hierarchical use).  The second argument of `on()` is the `callback` which should be invoked when the event occurs. Calling `on` returns a `SubscriptionDefinition` - giving you a convenient way to unsubscribe or apply additional options (discussed below) to the subscription.
 
 	var instance = new Worker(); // get an instance of something that has monologue's behavior
@@ -90,7 +90,7 @@ argument is simply the data published when the event was emitted.  The `envelope
 		*/
 	});
 
-#####Wildcard Subscriptions
+##### Wildcard Subscriptions
 As mentioned above, the `*` and `#` characters represent wildcards available when you subscribe to events. Topics are string values, and are often period-delimited. The part of the topic delimited by a period is called a 'word'. Using a `*` represents exactly one word in a topic, while the `#` character matches 0-n words.  For example:
 
 	// The topic binding below will match "name.changed" and "city.changed"
@@ -112,10 +112,10 @@ As mentioned above, the `*` and `#` characters represent wildcards available whe
 		// handle event data here….
 	});
 
-#####Unsubscribing
+##### Unsubscribing
 You have four possible ways to remove event listeners in monologue:
 
-######Removing a specific listener
+###### Removing a specific listener
 When you use `on` to subscribe to an event, it returns a `SubscriptionDefinition` object. This object contains several helper methods, one of which is `unsubscribe`:
 
 	var subscription = instance.on("#.changed", function(data, envelope){
@@ -124,7 +124,7 @@ When you use `on` to subscribe to an event, it returns a `SubscriptionDefinition
 
 	subscription.unsubscribe();
 
-######Removing all listeners for a topic
+###### Removing all listeners for a topic
 However, you can also call the `off` method on the monlogue-ized event emitter object:
 
 	var subscription = instance.on("#.changed", function(data, envelope){
@@ -137,7 +137,7 @@ However, you can also call the `off` method on the monlogue-ized event emitter o
 	// remove all subscriptions for a topic
 	instance.off("#.changed");
 
-######Removing all listeners for a topic/context combination
+###### Removing all listeners for a topic/context combination
 One of the SubscriptionDefinition helper methods is `withContext` - which allows you to specifiy the `this` context you want to apply to the subscription callback when it is invoked. Because of this, it's possible to remove all listeners for a specific topic that are using a particular 'context':
 
 	var subscription = instance.on("#.changed", function(data, envelope){
@@ -150,7 +150,7 @@ One of the SubscriptionDefinition helper methods is `withContext` - which allows
 	// remove all subscriptions for the topic + context combination
 	instance.off("#.changed", someObject);
 
-######Removing ALL listeners, period.
+###### Removing ALL listeners, period.
 This is the 'nuke it from orbit' option. Simply call `off` with no arguments, and all subscriptions will be removed from the object.
 
 	var subscriptionA = instance.on("#.changed", function(data, envelope){
@@ -164,7 +164,7 @@ This is the 'nuke it from orbit' option. Simply call `off` with no arguments, an
 	// buh-bye all subscriptions...
 	instance.off();
 
-#####Subscription Options
+##### Subscription Options
 As mentioned above - the `SubscriptionDefinition` object returned from a call to the `on` method provides some additional fluent configuration options:
 
 * **`withContext(object)`** - the provided argument becomes the `this` context inside the subscription callback.
@@ -179,8 +179,8 @@ As mentioned above - the `SubscriptionDefinition` object returned from a call to
 * **`withDelay(milliseconds)`** - delays invocation of the subscriber callback for the number of milliseconds specified.
 * **`withThrottle(milliseconds)`** - causes the subscriber callback to be invoked at most once per {x} milliseconds interval.
 
-#####Other Monologue Options
-######Customizing the Envelope
+##### Other Monologue Options
+###### Customizing the Envelope
 Any object that has been extended with Monologue's behavior will have a `getEnvelope` method which you can override to customize how the envelope is created. The default implementation looks like this:
 
 
@@ -195,7 +195,7 @@ Any object that has been extended with Monologue's behavior will have a `getEnve
 
 Note that the topic and data being published are passed in for optional use - allowing you to configure envelope data at run time, based on the event in progress.
 
-######Error Tracking
+###### Error Tracking
 One of the core features of monologue is that subscriber callbacks won't be able to crash the event emitter with uncaught exceptions. While developers **should** be cleaning up after themselves (and not crashing things with uncaught exceptions), they don't always do so. We don't want to simply swallow those exceptions, so by default monologue will store them in an aptly named `_yuno` member - which is an array of objects, where each object contains the subscription definition instance that threw the uncaught exception, as well as the envelope being published at the time of the event.  You can turn error tracking off by setting the `_trackErrors` member to `false`:
 
 
@@ -208,7 +208,7 @@ One of the core features of monologue is that subscriber callbacks won't be able
 	instance._trackErrors = false;
 
 
-#####Customizing Wildcard Bindings
+##### Customizing Wildcard Bindings
 Just like it's sister library postal.js, monologue's bindingsResolver object can be overridden with your own implementation. Don't like how AMQP's wildcards work? Want to create something that uses different characters, or logic in matching topics? All you have to do is create an object that implements a `compare(binding, topic)` method (where `binding` is the topic value used when a subscriber was added and `topic` is the actual topic of the event being published).  This function should return true for a match, or false otherwise.  Simply create your own resolver and replace the existing resolver with your own:
 
 
