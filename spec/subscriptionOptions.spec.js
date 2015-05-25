@@ -4,7 +4,6 @@ function monoFactory() {
 	return new Monologue();
 }
 describe( "Subscription Definition Options", function() {
-
 	var sub;
 
 	describe( "When calling defer()", function() {
@@ -92,7 +91,6 @@ describe( "Subscription Definition Options", function() {
 	} );
 
 	describe( "When calling disposeAfter()", function() {
-
 		describe( "disposing after 1 invocation", function() {
 			var monologue;
 			var count = 0;
@@ -111,7 +109,6 @@ describe( "Subscription Definition Options", function() {
 				monologue.emit( "Some.Topic", "Hai" );
 				count.should.equal( 1 );
 			} );
-
 		} );
 
 		describe( "disposing after 3 invocations", function() {
@@ -134,9 +131,7 @@ describe( "Subscription Definition Options", function() {
 				monologue.emit( "Some.Topic", "Hai" );
 				count.should.equal( 3 );
 			} );
-
 		} );
-
 	} );
 
 	describe( "When calling context() and disposeAfter()", function() {
@@ -152,8 +147,8 @@ describe( "Subscription Definition Options", function() {
 		} );
 
 		it( "Should invoke the callback with the provided context", function() {
-			var nm,
-				count = 0;
+			var nm;
+			var count = 0;
 			sub = monologue.on( "Some.Topic", function() {
 				nm = this.name;
 				count++;
@@ -166,10 +161,9 @@ describe( "Subscription Definition Options", function() {
 		it( "Should throw an exception if the disposeAfter argument is not a number", function() {
 			try {
 				monologue.on( "Some.Topic", function() {} ).context( obj ).disposeAfter( "fantastic" );
-			} catch (ex) {
+			} catch ( ex ) {
 				ex.should.be.instanceOf( Error );
 			}
-
 		} );
 	} );
 
@@ -196,7 +190,7 @@ describe( "Subscription Definition Options", function() {
 		describe( "On the Monologue instance", function() {
 			var monologue;
 			var count = 0;
-            var sub2;
+			var sub2;
 			beforeEach( function() {
 				monologue = monoFactory();
 			} );
@@ -208,10 +202,10 @@ describe( "Subscription Definition Options", function() {
 				sub = monologue.once( "Some.#", function() {
 					count++;
 				} );
-                sub2 = monologue.once("Some.#", function() {});
+				sub2 = monologue.once( "Some.#", function() {} );
 				monologue.emit( "Some.Topic", "Hai" );
 				monologue.emit( "Some.Topic", "Hai" );
-                monologue.emit( "Another.Topic", "Hai" );
+				monologue.emit( "Another.Topic", "Hai" );
 				count.should.equal( 1 );
 			} );
 		} );
@@ -307,7 +301,6 @@ describe( "Subscription Definition Options", function() {
 				} );
 			} );
 		} );
-
 	} );
 
 	describe( "When calling distinct()", function() {
@@ -416,7 +409,6 @@ describe( "Subscription Definition Options", function() {
 				] );
 			} );
 		} );
-
 	} );
 
 	describe( "When calling constraint()", function() {
@@ -454,7 +446,7 @@ describe( "Subscription Definition Options", function() {
 		it( "should throw an exception if the value provided is not a function", function() {
 			try {
 				monologue.on( "Some.Topic", function() {} ).constraint( 123 );
-			} catch (ex) {
+			} catch ( ex ) {
 				ex.should.be.instanceOf( Error );
 			}
 		} );
@@ -470,9 +462,9 @@ describe( "Subscription Definition Options", function() {
 			sub = monologue.on( "Some.Topic", function( data ) {
 				events.push( data );
 			} ).constraints( [ function() {
-					var cnt = count;
-					count += 1;
-					return cnt === 0;
+				var cnt = count;
+				count += 1;
+				return cnt === 0;
 			} ] );
 		} );
 
@@ -542,7 +534,7 @@ describe( "Subscription Definition Options", function() {
 		it( "should throw an exception if the value provided is not a number", function() {
 			try {
 				monologue.on( "Some.Topic", function() {} ).debounce( "bouncey bounce" );
-			} catch (ex) {
+			} catch ( ex ) {
 				ex.should.be.instanceOf( Error );
 			}
 		} );
@@ -576,7 +568,7 @@ describe( "Subscription Definition Options", function() {
 		it( "should throw an exception if the value provided is not a number", function() {
 			try {
 				monologue.on( "Some.Topic", function() {} ).delay( "wait a bit" );
-			} catch (ex) {
+			} catch ( ex ) {
 				ex.should.be.instanceOf( Error );
 			}
 		} );
@@ -604,7 +596,7 @@ describe( "Subscription Definition Options", function() {
 					name: "Hey, Jude."
 				} );
 			};
-			for (var i = 0; i < 10; i++) {
+			for ( var i = 0; i < 10; i++ ) {
 				fn();
 			}
 			setTimeout( function() {
@@ -615,10 +607,9 @@ describe( "Subscription Definition Options", function() {
 		it( "should throw an exception if the value provided is not a number", function() {
 			try {
 				monologue.on( "Some.Topic", function() {} ).throttle( "whoa buddy" );
-			} catch (ex) {
+			} catch ( ex ) {
 				ex.should.be.instanceOf( Error );
 			}
 		} );
 	} );
-
 } );

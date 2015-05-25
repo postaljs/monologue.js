@@ -1,7 +1,7 @@
 {
     "name": "monologue.js",
     "description": "EventEmitter replacement with AMQP-style bindings and other advanced features. Compatible with postal.js's API.",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "homepage": "https://github.com/postaljs/monologue.js",
     "repository": {
         "type": "git",
@@ -40,10 +40,10 @@
         "riveter": "git://github.com/ifandelse/riveter.git#0cffebb92117c88543cb4359fb9fd69c2d65dd22"
     },
     "devDependencies": {
-        "jquery": "~1.10.2",
+        "jquery": "1.x",
         "bootstrap": "~3.0.3",
-        "expect": "0.1.2",
-        "mocha": "~1.17.0",
+        "should": "6.0.3",
+        "mocha": "~2.2.5",
         "requirejs": "~2.1.10",
         "postal.diagnostics": "~0.7.3"
     },

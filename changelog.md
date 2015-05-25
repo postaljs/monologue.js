@@ -1,3 +1,7 @@
+## v0.3.2
+* Fixed issue where downstream once() subscribers were breaking the iteration of a publish over a list of subscribers.
+* Added JSCS formatting, updated gulp tasks.
+
 ## v0.3.1
 * Fixed bug where listeners were incorrectly added to another topic's lookup cache when adding a new subscriber for an event that had already been published once.
 

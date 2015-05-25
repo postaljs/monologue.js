@@ -1,7 +1,6 @@
 /*global describe,it,afterEach,beforeEach,Monologue */
 
 describe( "Adding Subscriptions", function() {
-
 	var monologue = new Monologue();
 	var sub;
 	var events = [];
@@ -29,5 +28,4 @@ describe( "Adding Subscriptions", function() {
 	it( "It should add the SubscriptionDefinition to the monologue._subscriptions", function() {
 		monologue._subscriptions[ "Some.Topic" ][ 0 ].should.eql( sub );
 	} );
-
 } );

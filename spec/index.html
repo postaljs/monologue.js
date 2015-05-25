@@ -7,9 +7,9 @@
 </head>
 <body>
 <div id="mocha"></div>
-<script src="../bower/jquery/jquery.js"></script>
-<script src="../bower/lodash/dist/lodash.js"></script>
-<script src="../bower/expect/expect.js"></script>
+<script src="../bower/jquery/dist/jquery.js"></script>
+<script src="../bower/lodash/lodash.js"></script>
+<script src="../bower/should/should.js"></script>
 <script src="../bower/mocha/mocha.js"></script>
 <script type="text/javascript">
     mocha.setup({ ui: 'bdd', timeout: 60000, ignoreLeaks: true });
@@ -21,6 +21,7 @@
 <script src="emitting.spec.js"></script>
 <script src="inheriting.spec.js"></script>
 <script src="subscriptionOptions.spec.js"></script>
+<script src="resolver.spec.js"></script>
 
 <script type="text/javascript">
     mocha.run();

@@ -8,8 +8,8 @@ describe( "Extending From Monologue", function() {
 		}
 	} );
 
-	var instance = new MyStuff(),
-		emitted = false;
+	var instance = new MyStuff();
+	var emitted = false;
 
 	instance.on( "bar", function() {
 		emitted = true;
@@ -27,7 +27,6 @@ describe( "Extending From Monologue", function() {
 		instance.prop.should.equal( "some value" );
 		emitted.should.equal( true );
 	} );
-
 } );
 
 describe( "Inheriting From Monologue via riveter", function() {
@@ -43,8 +42,8 @@ describe( "Inheriting From Monologue via riveter", function() {
 
 	MyStuff.inherits( Monologue );
 
-	var instance = new MyStuff(),
-		emitted = false;
+	var instance = new MyStuff();
+	var emitted = false;
 
 	instance.on( "bar", function() {
 		emitted = true;
@@ -62,7 +61,6 @@ describe( "Inheriting From Monologue via riveter", function() {
 		instance.prop.should.equal( "some value" );
 		emitted.should.equal( true );
 	} );
-
 } );
 
 describe( "When calling Monologue.mixInto", function() {
@@ -79,5 +77,4 @@ describe( "When calling Monologue.mixInto", function() {
 	it( "MyStuff should have Monologue's methods.", function() {
 		instance.emit.should.equal( Monologue.prototype.emit );
 	} );
-
 } );

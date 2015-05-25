@@ -31,7 +31,7 @@ function removeSubscriber( subDef, emitter, idx, list ) {
 	// remove SubscriptionDefinition from cache
 	if ( subDef.cacheKeys && subDef.cacheKeys.length ) {
 		var key;
-		while (key = subDef.cacheKeys.pop()) {
+		while ( key = subDef.cacheKeys.pop() ) {
 			_.each( emitter._cache[ key ], getCachePurger( subDef, key, emitter._cache ) );
 		}
 	}
@@ -61,7 +61,7 @@ Monologue.prototype = {
 		var self = this;
 		self._subscriptions = self._subscriptions || {};
 		self._cache = self._cache || {};
-		switch (arguments.length) {
+		switch ( arguments.length ) {
 			case 0:
 				_.each( self._subscriptions, function( tpc ) {
 					_.each( tpc, function( subDef, idx ) {
@@ -72,7 +72,7 @@ Monologue.prototype = {
 				break;
 			case 1:
 				var type = Object.prototype.toString.call( topic ) === "[object String]" ? "topic" : topic instanceof SubscriptionDefinition ? "def" : "context";
-				switch (type) {
+				switch ( type ) {
 					case "topic":
 						if ( self._subscriptions[ topic ] ) {
 							_.each( self._subscriptions[ topic ], function( subDef, idx ) {
@@ -120,7 +120,7 @@ Monologue.prototype = {
 			cache = this._cache[ topic ] = [];
 			var cacherFn = getCacher( topic, cache, invoker );
 			_.each( this._subscriptions, function( candidates ) {
-				_.each( Array.prototype.slice.call(candidates,0), cacherFn );
+				_.each( Array.prototype.slice.call( candidates, 0 ), cacherFn );
 			} );
 		} else {
 			_.each( cache, invoker );

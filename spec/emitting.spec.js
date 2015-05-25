@@ -7,43 +7,43 @@ describe( "Emitting Events", function() {
 	var subA, subB, subAFired, subBFired;
 	var events, envs;
 
-    describe( "Lookup Cache", function(){
-        var monologue;
-        beforeEach( function() {
-            monologue = new monoFactory();
-            events = [];
-            envs = [];
-            subAFired = 0;
-            subBFired = 0;
-            monologue.emit( "transition", "Yo->Yolo" );
-            subA = monologue.on( "transition", function( data, env ) {
-                events.push( data );
-                envs.push( env );
-                subAFired += 1;
-            } );
-            subB = monologue.on( "Yeppers", function( data, env ) {
-                events.push( data );
-                envs.push( env );
-                subBFired += 1;
-            } );
-            monologue.emit( "transition", "Yo->Yolo" );
-        } );
+	describe( "Lookup Cache", function() {
+		var monologue;
+		beforeEach( function() {
+			monologue = monoFactory();
+			events = [];
+			envs = [];
+			subAFired = 0;
+			subBFired = 0;
+			monologue.emit( "transition", "Yo->Yolo" );
+			subA = monologue.on( "transition", function( data, env ) {
+				events.push( data );
+				envs.push( env );
+				subAFired += 1;
+			} );
+			subB = monologue.on( "Yeppers", function( data, env ) {
+				events.push( data );
+				envs.push( env );
+				subBFired += 1;
+			} );
+			monologue.emit( "transition", "Yo->Yolo" );
+		} );
 
-        afterEach( function() {
-            subA.unsubscribe();
-            subB.unsubscribe();
-            monologue.off();
-        } );
-        it("should properly populate lookup cache", function() {
-            subAFired.should.equal(1);
-            subBFired.should.equal(0);
-        });
-    });
+		afterEach( function() {
+			subA.unsubscribe();
+			subB.unsubscribe();
+			monologue.off();
+		} );
+		it( "should properly populate lookup cache", function() {
+			subAFired.should.equal( 1 );
+			subBFired.should.equal( 0 );
+		} );
+	} );
 
 	describe( "With plain topic matching", function() {
 		var monologue;
 		beforeEach( function() {
-			monologue = new monoFactory();
+			monologue = monoFactory();
 			events = [];
 			envs = [];
 			subAFired = false;
@@ -93,19 +93,16 @@ describe( "Emitting Events", function() {
 		it( "Should remove irrelevant cache entries", function() {
 			var sub = monologue.on( "Yet.Another.Topic", function() {} );
 			monologue.emit( "Yet.Another.Topic", "Hai, 2 U" );
-			console.log( monologue._cache );
 			monologue._cache.should.have.property( "Yet.Another.Topic" );
 			sub.unsubscribe();
-			console.log( monologue._cache );
 			monologue._cache.should.not.have.property( "Yet.Another.Topic" );
-
 		} );
 	} );
 
 	describe( "With wildcards involving * at start of binding", function() {
 		var monologue;
 		beforeEach( function() {
-			monologue = new monoFactory();
+			monologue = monoFactory();
 			events = [];
 			envs = [];
 			subAFired = false;
@@ -136,7 +133,7 @@ describe( "Emitting Events", function() {
 	describe( "With wildcards involving * at middle of binding", function() {
 		var monologue;
 		beforeEach( function() {
-			monologue = new monoFactory();
+			monologue = monoFactory();
 			events = [];
 			envs = [];
 			subAFired = false;
@@ -167,7 +164,7 @@ describe( "Emitting Events", function() {
 	describe( "With wildcards involving * at end of binding", function() {
 		var monologue;
 		beforeEach( function() {
-			monologue = new monoFactory();
+			monologue = monoFactory();
 			events = [];
 			envs = [];
 			subAFired = false;
@@ -202,7 +199,7 @@ describe( "Emitting Events", function() {
 	describe( "With wildcards involving # at start of binding", function() {
 		var monologue;
 		beforeEach( function() {
-			monologue = new monoFactory();
+			monologue = monoFactory();
 			events = [];
 			envs = [];
 			subAFired = false;
@@ -237,7 +234,7 @@ describe( "Emitting Events", function() {
 	describe( "With wildcards involving # at middle of binding", function() {
 		var monologue;
 		beforeEach( function() {
-			monologue = new monoFactory();
+			monologue = monoFactory();
 			events = [];
 			envs = [];
 			subAFired = false;
@@ -272,7 +269,7 @@ describe( "Emitting Events", function() {
 	describe( "With wildcards involving # at end of binding", function() {
 		var monologue;
 		beforeEach( function() {
-			monologue = new monoFactory();
+			monologue = monoFactory();
 			events = [];
 			envs = [];
 			subAFired = false;
@@ -311,7 +308,7 @@ describe( "Emitting Events", function() {
 	describe( "With wildcards matching only single word topics", function() {
 		var monologue;
 		beforeEach( function() {
-			monologue = new monoFactory();
+			monologue = monoFactory();
 			events = [];
 			envs = [];
 			subAFired = false;
@@ -342,7 +339,7 @@ describe( "Emitting Events", function() {
 	describe( "With wildcards matching any length topic", function() {
 		var monologue;
 		beforeEach( function() {
-			monologue = new monoFactory();
+			monologue = monoFactory();
 			events = [];
 			envs = [];
 			subAFired = false;
@@ -379,8 +376,9 @@ describe( "Emitting Events", function() {
 	} );
 
 	describe( "When customizing the envelope", function() {
-		var monologue = new Monologue(),
-			envelope, sub;
+		var monologue = new Monologue();
+		var envelope;
+		var sub;
 
 		it( "The default envelope should return expected object", function() {
 			var result = monologue.getEnvelope();
@@ -414,74 +412,19 @@ describe( "Emitting Events", function() {
 	} );
 
 	describe( "When publishing empty data", function() {
-		var monologue = new Monologue(),
-			sub,
-			fired = false,
-			envelope;
+		var monologue = new Monologue();
+		var sub;
+		var fired = false;
+		var envelope;
 
 		it( "A customized envelope should return the expected object", function() {
 			sub = monologue.on( "Empty", function( data, env ) {
 				fired = true;
 				envelope = env;
-				console.log( data, env );
 			} );
 			monologue.emit( "Empty" );
 			fired.should.equal( true );
 			( typeof envelope.data ).should.equal( "undefined" );
 		} );
 	} );
-
-	// describe("When throwing exceptions in the subscriber", function() {
-	//     describe("With error tracking ON", function() {
-	//         var monologue = new Monologue(),
-	//             subA, subB, subBFired;
-	//         monologue._trackErrors = true;
-
-	//         subA = monologue.on("Anything", function() {
-	//             throw "O NOES!";
-	//         });
-
-	//         subB = monologue.on("Anything", function() {
-	//             subBFired = true;
-	//         });
-
-	//         monologue.emit("Anything", {
-	//             msg: "Oh, hai"
-	//         });
-
-	//         it("Should have fired the second subscriber", function() {
-	//             expect(subBFired).to.be(true);
-	//         });
-
-	//         it("Should have captured the error", function() {
-	//             expect(monologue._yuno.length).to.be(1);
-	//             expect(monologue._yuno[0].exception).to.be("O NOES!");
-	//         });
-	//     });
-
-	//     describe("With error tracking OFF", function() {
-	//         var monologue = new Monologue(),
-	//             subA, subB, subBFired;
-
-	//         subA = monologue.on("Anything", function() {
-	//             throw "O NOES!";
-	//         });
-
-	//         subB = monologue.on("Anything", function() {
-	//             subBFired = true;
-	//         });
-
-	//         monologue.emit("Anything", {
-	//             msg: "Oh, hai"
-	//         });
-
-	//         it("Should have fired the second subscriber", function() {
-	//             expect(subBFired).to.be(true);
-	//         });
-
-	//         it("Should not have captured the error", function() {
-	//             expect(monologue._yuno).to.be(undefined);
-	//         });
-	//     });
-	// });
 } );

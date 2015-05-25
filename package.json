@@ -1,7 +1,7 @@
 {
   "name": "monologue.js",
   "description": "EventEmitter replacement with AMQP-style bindings and other advanced features. Compatible with postal.js's API.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "homepage": "https://github.com/postaljs/monologue.js",
   "repository": {
     "type": "git",
@@ -50,25 +50,30 @@
     "riveter": "git://github.com/ifandelse/riveter.git#0cffebb92117c88543cb4359fb9fd69c2d65dd22"
   },
   "devDependencies": {
-    "bower": "~1.2.8",
-    "expect.js": "~0.2.0",
+    "bower": "^1.4.1",
+    "expect.js": "~0.3.1",
     "express": "~3.4.7",
     "gulp": "~3.8.10",
-    "gulp-beautify": "~1.0.3",
-    "gulp-header": "~1.0.2",
+    "gulp-beautify": "~1.1.2",
+    "gulp-changed": "^1.2.1",
+    "gulp-header": "~1.2.2",
     "gulp-hint-not": "~0.0.3",
     "gulp-imports": "~0.0.1",
-    "gulp-plato": "^0.2.1",
+    "gulp-istanbul": "^0.9.0",
+    "gulp-jshint": "^1.11.0",
+    "gulp-jscs": "^1.6.0",
+    "gulp-plato": "^1.0.2",
     "gulp-rename": "^1.2.0",
-    "gulp-spawn-mocha": "^0.5.1",
-    "gulp-uglify": "^0.3.0",
-    "gulp-util": "~2.2.9",
+    "gulp-spawn-mocha": "^2.0.1",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "~3.0.4",
     "istanbul": "^0.3.2",
+    "jshint-stylish": "^2.0.0",
     "karma": "^0.12.24",
     "mocha": "^2.0.1",
     "open": "~0.0.4",
-    "should": "^4.3.1",
-    "sinon": "~1.11.1"
+    "should": "^6.0.3",
+    "sinon": "~1.14.1"
   },
   "licenses": [
     {

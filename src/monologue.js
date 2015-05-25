@@ -1,5 +1,5 @@
 /*global Monologue */
-(function( root, factory ) {
+( function( root, factory ) {
 	/* istanbul ignore if  */
 	if ( typeof define === "function" && define.amd ) {
 		// AMD. Register as an anonymous module.
@@ -19,4 +19,4 @@
 	//import("subscriptionDefinition.js");
 	//import("monologue.ctor.js");
 	return Monologue;
-} ));
+} ) );
