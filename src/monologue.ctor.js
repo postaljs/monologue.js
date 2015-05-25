@@ -120,7 +120,7 @@ Monologue.prototype = {
 			cache = this._cache[ topic ] = [];
 			var cacherFn = getCacher( topic, cache, invoker );
 			_.each( this._subscriptions, function( candidates ) {
-				_.each( candidates, cacherFn );
+				_.each( Array.prototype.slice.call(candidates,0), cacherFn );
 			} );
 		} else {
 			_.each( cache, invoker );

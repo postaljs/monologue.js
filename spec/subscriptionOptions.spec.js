@@ -196,6 +196,7 @@ describe( "Subscription Definition Options", function() {
 		describe( "On the Monologue instance", function() {
 			var monologue;
 			var count = 0;
+            var sub2;
 			beforeEach( function() {
 				monologue = monoFactory();
 			} );
@@ -204,11 +205,13 @@ describe( "Subscription Definition Options", function() {
 			} );
 
 			it( "Should unsubscribe the callback after 1 invocation", function() {
-				sub = monologue.once( "Some.Topic", function() {
+				sub = monologue.once( "Some.#", function() {
 					count++;
 				} );
+                sub2 = monologue.once("Some.#", function() {});
 				monologue.emit( "Some.Topic", "Hai" );
 				monologue.emit( "Some.Topic", "Hai" );
+                monologue.emit( "Another.Topic", "Hai" );
 				count.should.equal( 1 );
 			} );
 		} );
