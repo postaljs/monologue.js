@@ -26,7 +26,7 @@ var banner = [ "/**",
 	""
 ].join( "\n" );
 
-gulp.task( "combine", function() {
+gulp.task( "combine", [ "format" ], function() {
 	return gulp.src( [ "./src/monologue.js" ] )
 		.pipe( header( banner, {
 			pkg: pkg

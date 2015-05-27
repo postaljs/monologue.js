@@ -1,5 +1,5 @@
 /*global SubscriptionDefinition,bindingsResolver,riveter */
-
+var slice = Array.prototype.slice;
 var Monologue = function() {};
 
 function getCacher( topic, cache, done ) {
@@ -120,10 +120,10 @@ Monologue.prototype = {
 			cache = this._cache[ topic ] = [];
 			var cacherFn = getCacher( topic, cache, invoker );
 			_.each( this._subscriptions, function( candidates ) {
-				_.each( Array.prototype.slice.call( candidates, 0 ), cacherFn );
+				_.each( slice.call( candidates, 0 ), cacherFn );
 			} );
 		} else {
-			_.each( _.filter( cache ), invoker );
+			_.each( slice.call( cache, 0 ), invoker );
 		}
 	},
 
