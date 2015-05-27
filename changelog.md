@@ -1,3 +1,7 @@
+## v0.3.3
+* Fixed issue where cache array held undefined values (due to subscriber removal).
+* Updated gulpfile to format prior to combining
+
 ## v0.3.2
 * Fixed issue where downstream once() subscribers were breaking the iteration of a publish over a list of subscribers.
 * Added JSCS formatting, updated gulp tasks.

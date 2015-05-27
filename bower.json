@@ -1,22 +1,27 @@
 {
     "name": "monologue.js",
     "description": "EventEmitter replacement with AMQP-style bindings and other advanced features. Compatible with postal.js's API.",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "homepage": "https://github.com/postaljs/monologue.js",
     "repository": {
         "type": "git",
         "url": "git://github.com/postaljs/monologue.js.git"
     },
-    "author": "Jim Cowart (http://freshbrewedcode.com/jimcowart)",
-    "contributors": [{
-        "name": "Jim Cowart",
-        "email": "jim@ifandelse.com",
-        "url": "http://freshbrewedcode.com/jimcowart"
-    }, {
-        "name": "Doug Neiner",
-        "email": "WhyNotJustComment@OnMyBlog.com",
-        "url": "http://dougneiner.com"
-    }],
+    "author": "Jim Cowart (http://ifandelse.com)",
+    "contributors": [
+        {
+          "name": "Jim Cowart",
+          "url": "http://ifandelse.com"
+        },
+        {
+          "name": "Doug Neiner",
+          "url": "http://dougneiner.com"
+        },
+        {
+          "name": "Alex Robson",
+          "url": "http://nerdventure.io"
+        }
+    ],
     "keywords": [
         "monologue",
         "postal",

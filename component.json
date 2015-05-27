@@ -1,6 +1,6 @@
 {
     "name": "monologue",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "main": ["lib/monologue.js"],
     "dependencies": {
         "lodash": "3.x",

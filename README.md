@@ -218,4 +218,17 @@ Just like it's sister library postal.js, monologue's bindingsResolver object can
 	    }
 	}
 
+## Build, Dependencies, etc.
 
+* monologue depends on [lodash.js](http://lodash.com/) and a fork of [riveter](https://github.com/ifandelse/riveter/tree/0cffebb92117c88543cb4359fb9fd69c2d65dd22)
+* monologue uses [gulp.js](http://gulpjs.com/) for building, running tests and examples.
+    * To build
+        * run `npm install` (to install all deps)
+        * run `bower install` (yep, we're using at least one thing only found on bower in the local project runner)
+        * run `gulp` then check the lib folder for the output
+    * To run tests & examples
+        * Tests are node-based: `gulp test`
+        * To run browser-based examples:
+            * run `gulp server`
+            * navigate in your browser to <http://localhost:3080/>
+            * if you want to see test coverage or plato reports be sure to run `gulp coverage` and `gulp report` (respectively) in order to generate them, as they are not stored with the repo.

@@ -1,9 +1,7 @@
 var gulp = require( "gulp" );
 var fileImports = require( "gulp-imports" );
 var header = require( "gulp-header" );
-var beautify = require( "gulp-beautify" );
 var hintNot = require( "gulp-hint-not" );
-var istanbul = require( "gulp-istanbul" );
 var uglify = require( "gulp-uglify" );
 var rename = require( "gulp-rename" );
 var plato = require( "gulp-plato" );
@@ -33,10 +31,6 @@ gulp.task( "combine", [ "format" ], function() {
 		} ) )
 		.pipe( fileImports() )
 		.pipe( hintNot() )
-		.pipe( beautify( {
-			indentSize: 4,
-			preserveNewlines: false
-		} ) )
 		.pipe( gulp.dest( "./lib/" ) )
 		.pipe( uglify( {
 			compress: {
@@ -125,17 +119,12 @@ gulp.task( "jshint", function() {
 } );
 
 gulp.task( "coverage", [ "format" ], function( cb ) {
-	gulp.src( [ allSrcFiles ] )
-	.pipe( istanbul() ) // Covering files
-	.pipe( istanbul.hookRequire() ) // Force `require` to return covered files
-        .on( "finish", function() {
-	gulp.src( [ "./spec/helpers/node-setup.js", allTestFiles ] )
-	.pipe( mocha() )
-	.pipe( istanbul.writeReports() ) // Creating the reports after tests runned
-                .on( "end", function() {
-	process.exit();
-                } );
-        } );
+	return gulp.src( [ allTestFiles ], { read: false } )
+        .pipe( mocha( {
+	r: "spec/helpers/node-setup.js",
+	R: "spec",
+	istanbul: true
+        } ) );
 } );
 
 gulp.task( "show-coverage", function() {

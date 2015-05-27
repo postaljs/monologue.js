@@ -1,5 +1,4 @@
 /*global describe,it,afterEach,beforeEach,Monologue */
-
 describe( "Adding Subscriptions", function() {
 	var monologue = new Monologue();
 	var sub;
