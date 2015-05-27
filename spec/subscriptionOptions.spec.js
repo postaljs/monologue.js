@@ -209,6 +209,37 @@ describe( "Subscription Definition Options", function() {
 				count.should.equal( 1 );
 			} );
 		} );
+		describe( "With Race Condition Clearing Cache During Resolution", function() {
+			var monologue;
+			var count = 0;
+			beforeEach( function( done ) {
+				var monologue = monoFactory();
+				monologue.once( "signal", function() {
+					count++;
+					setTimeout( function() {
+						monologue.once( "signal", function() {
+							count++;
+						} );
+					}, 0 );
+				} );
+				monologue.once( "signal", function() {
+					count++;
+					setTimeout( function() {
+						monologue.once( "signal", function() {
+							count++;
+							done();
+						} );
+						monologue.emit( "signal", {} );
+					}, 15 );
+				} );
+				monologue.emit( "signal", {} );
+				monologue.emit( "signal", {} );
+			} );
+
+			it( "should invoke all four callbacks with no exceptions", function() {
+				count.should.equal( 4 );
+			} );
+		} );
 	} );
 
 	describe( "When subscribing with catch()", function() {

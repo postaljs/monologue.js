@@ -123,7 +123,7 @@ Monologue.prototype = {
 				_.each( Array.prototype.slice.call( candidates, 0 ), cacherFn );
 			} );
 		} else {
-			_.each( cache, invoker );
+			_.each( _.filter( cache ), invoker );
 		}
 	},
 
