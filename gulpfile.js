@@ -2,6 +2,7 @@ var gulp = require( "gulp" );
 var fileImports = require( "gulp-imports" );
 var header = require( "gulp-header" );
 var hintNot = require( "gulp-hint-not" );
+var istanbul = require( "gulp-istanbul" );
 var uglify = require( "gulp-uglify" );
 var rename = require( "gulp-rename" );
 var plato = require( "gulp-plato" );
@@ -123,9 +124,24 @@ gulp.task( "coverage", [ "format" ], function( cb ) {
         .pipe( mocha( {
 	r: "spec/helpers/node-setup.js",
 	R: "spec",
-	istanbul: true
+	istanbul: {
+		x: "spec/**/*"
+	}
         } ) );
 } );
+// gulp.task( "coverage", [ "format" ], function() {
+// 	gulp.src( [ allSrcFiles ] )
+// 	.pipe( istanbul() ) // Covering files
+// 	.pipe( istanbul.hookRequire() ) // Force `require` to return covered files
+//         .on( "finish", function() {
+// 	gulp.src( [ "./spec/helpers/node-setup.js", allTestFiles ] )
+// 	.pipe( mocha() )
+// 	.pipe( istanbul.writeReports() ) // Creating the reports after tests runned
+//         .on( "end", function() {
+// 	process.exit();
+//         } );
+//     } );
+// } );
 
 gulp.task( "show-coverage", function() {
 	open( "./coverage/lcov-report/index.html" );

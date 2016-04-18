@@ -1,3 +1,6 @@
+## v0.3.5
+* Remove unnecessary _.bind call that seems to contribute to memory/garbage
+
 ## v0.3.3
 * Fixed issue where cache array held undefined values (due to subscriber removal).
 * Updated gulpfile to format prior to combining

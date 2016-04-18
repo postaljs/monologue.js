@@ -1,7 +1,7 @@
 {
     "name": "monologue.js",
     "description": "EventEmitter replacement with AMQP-style bindings and other advanced features. Compatible with postal.js's API.",
-    "version": "0.3.3",
+    "version": "0.3.5",
     "homepage": "https://github.com/postaljs/monologue.js",
     "repository": {
         "type": "git",
@@ -20,6 +20,10 @@
         {
           "name": "Alex Robson",
           "url": "http://nerdventure.io"
+        },
+        {
+          "name": "Ryan Niemeyer",
+          "url": "http://knockmeout.net"
         }
     ],
     "keywords": [
